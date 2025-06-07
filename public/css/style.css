@@ -1,0 +1,44 @@
+body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #e0f7fa; /* putih kebiruan muda */
+        }
+
+        .navbar {
+        background-color: #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-brand {
+        font-weight: 600;
+        color: #0277bd !important;
+        letter-spacing: 0.5px;
+        }
+
+        .nav-link {
+        color: #0277bd !important;
+        font-weight: 500;
+        }
+
+        .nav-link.active {
+        background-color: #1e90ff !important;
+        color: #e0f7fa !important;
+        border-radius: 0.4rem;
+        }
+
+        .nav-link.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+        }
+
+        .btn-login {
+        background-color: #1e90ff;
+        color: white;
+        font-weight: 500;
+        padding: 6px 16px;
+        border-radius: 6px;
+        transition: background-color 0.3s;
+        }
+
+        .btn-login:hover {
+        background-color: #0277bd;
+        }
