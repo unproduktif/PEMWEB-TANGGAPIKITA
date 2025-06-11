@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('donasis', function (Blueprint $table) {
             $table->id('id_donasi');
+            $table->unsignedBigInteger('id_laporan');
             $table->unsignedBigInteger('id_user');
             $table->string('judul');
             $table->text('deskripsi');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->date('tgl_selesai');
             $table->timestamps();
 
+             $table->foreign('id_laporan')->references('id_laporan')->on('laporans')->onDelete('restrict');
             $table->foreign('id_user')->references('id_user')->on('users')->onDelete('restrict');
         });
     }

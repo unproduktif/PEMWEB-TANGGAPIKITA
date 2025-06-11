@@ -23,7 +23,10 @@ Route::get('/lapor', function () {
 
 Route::get('/donasi', function () {
     return view('pages.donasi');
-});
+})->name('donasi');
+
+Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi.index');
+Route::get('/donasi/{id_donasi}', [DonasiController::class, 'show'])->name('donasi.detailDonasi');
 
 Route::get('/bencana', [LaporanController::class, 'index']);
 

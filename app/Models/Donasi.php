@@ -24,4 +24,10 @@ class Donasi extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function donasis()
+    {
+        return $this->hasMany(Donasi::class, 'id_laporan');
+    }
+
 }
