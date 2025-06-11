@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonasiController;
+use App\Http\Controllers\LaporanController;
+
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('/home', function () {
@@ -22,3 +24,9 @@ Route::get('/lapor', function () {
 Route::get('/donasi', function () {
     return view('pages.donasi');
 });
+
+Route::get('/bencana', [LaporanController::class, 'index']);
+
+Route::get('/laporans', [LaporanController::class, 'index'])->name('laporans.index');
+
+Route::get('/laporans/{laporan}', [LaporanController::class, 'show'])->name('laporans.show');
