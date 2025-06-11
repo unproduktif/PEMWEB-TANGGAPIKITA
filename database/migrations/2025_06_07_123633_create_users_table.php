@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('kota');
             $table->string('provinsi');
             $table->foreign('id_user')->references('id_akun')->on('akuns')->onDelete('restrict');
+            $table->timestamps();
         });
     }
 
