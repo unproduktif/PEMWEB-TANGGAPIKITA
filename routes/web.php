@@ -19,6 +19,9 @@ Route::get('/lapor', function () {
     return view('pages.laporan');
 });
 
+Route::post('/lapor', [LaporanController::class, 'store'])->name('laporan.store');
+
+
 Route::get('/donasi', function () {
     return view('pages.donasi');
 });

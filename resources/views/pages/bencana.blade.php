@@ -66,12 +66,6 @@
                         <a href="{{ route('laporans.show', $laporan->id_laporan) }}" class="btn btn-outline-primary">
                             <i class="bi bi-eye-fill me-1"></i> Lihat Detail
                         </a>
-                        @if ($laporan->media)
-                            <div class="mt-3">
-                                <img src="{{ asset('storage/' . $laporan->media) }}" class="img-fluid rounded" alt="Media Bencana">
-                            </div>
-                        @endif
-                    </div>
                 </div>
             </div>
 
