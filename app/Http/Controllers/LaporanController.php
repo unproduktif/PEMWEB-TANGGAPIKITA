@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Laporan;
+use Illuminate\Support\Facades\Storage;
 
 class LaporanController extends Controller
 {
@@ -54,4 +54,44 @@ class LaporanController extends Controller
         return view('laporans.show', compact('laporan'));
     }
 
+    public function store(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'keterangan' => 'nullable|string',
+            'lokasi' => 'required|string|max:255',
+            'media' => 'required|file|mimes:jpeg,png,jpg,mp4,mov,avi|max:10240',
+            'tgl_publish' => 'nullable|date', // ✅ ini perbaikannya
+            'id_user' => 'required|integer',
+            'id_admin' => 'required|integer',
+        ]);
+
+        // Tentukan nilai default jika kosong
+        $tglPublish = $request->tgl_publish ?? now();
+
+        // Proses upload media
+        $mediaPath = $request->file('media')->store('uploads/media', 'public');
+
+        // Simpan ke database
+        Laporan::create([
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'keterangan' => $request->keterangan,
+            'lokasi' => $request->lokasi,
+            'media' => $mediaPath,
+            'tgl_publish' => $tglPublish, // ✅ pakai nilai yang sudah diproses
+            'id_user' => $request->id_user,
+            'id_admin' => $request->id_admin,
+        ]);
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Laporan berhasil dikirim.');
+    }
+
+
+
 }
+
+
