@@ -1,27 +1,24 @@
 <?php
 
 namespace Database\Factories;
-
-use App\Models\Akun;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Akun>
+ */
 class AkunFactory extends Factory
 {
-    protected $model = Akun::class;
-
-    public function definition()
+    public function definition(): array
     {
         return [
             'nama' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'password' => Hash::make('password123'), // password default terenkripsi
-            'foto' => null, // bisa kamu isi dengan faker image jika mau
+            'password' => Hash::make('password123'), // password default, bisa diganti
+            'foto' => $this->faker->imageUrl(),
             'no_hp' => $this->faker->phoneNumber(),
             'alamat' => $this->faker->address(),
             'role' => $this->faker->randomElement(['user', 'admin']),
-            'tgl_register' => now(),
         ];
     }
 }

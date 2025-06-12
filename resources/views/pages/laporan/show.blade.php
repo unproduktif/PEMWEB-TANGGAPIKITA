@@ -32,7 +32,7 @@
             </div>
         @endif
 
-        <a href="{{ route('laporans.index') }}" class="btn btn-secondary mt-4">
+        <a href="{{ route('laporan.index') }}" class="btn btn-secondary mt-4">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
     </div>

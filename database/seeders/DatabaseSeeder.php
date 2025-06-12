@@ -4,7 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\Akun;
 use App\Models\User;
+use App\Models\Admin;
+use App\Models\Laporan;
 use App\Models\Donasi;
+use App\Models\Edukasi;
+use App\Models\Alokasi_dana;
+use App\Models\Laporan_donasi;
+use App\Models\User_donasi;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,20 +22,16 @@ class DatabaseSeeder extends Seeder
         // Buat 10 akun dulu
         $akuns = Akun::factory(10)->create();
 
-        // Buat 10 user, sambil assign id_user dari akuns yang sudah dibuat
-        $akuns->each(function ($akun) {
-            User::factory()->create([
-                'id_user' => $akun->id_akun, // id_user di tabel users mengacu ke id_akun di akuns
-            ]);
-        });
+        Akun::factory()->count(10)->create();
+        Admin::factory()->count(3)->create();
+        User::factory()->count(5)->create();
+        Laporan::factory()->count(10)->create();
+        Donasi::factory(10)->create();
+        User_donasi::factory(20)->create();
+        Laporan_donasi::factory(10)->create();
+        Alokasi_dana::factory(20)->create();
+        Edukasi::factory(10)->create();
 
-        // Ambil semua users buat donasi
-        $users = User::all();
 
-        // Buat 20 donasi dengan id_user dari user yang sudah dibuat
-        Donasi::factory(20)->make()->each(function ($donasi) use ($users) {
-            $donasi->id_user = $users->random()->id_user;
-            $donasi->save();
-        });
     }
 }

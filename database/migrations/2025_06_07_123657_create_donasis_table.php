@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_donasi');
             $table->unsignedBigInteger('id_laporan');
             $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_laporan');
             $table->string('judul');
             $table->text('deskripsi');
             $table->bigInteger('target');
@@ -23,8 +24,8 @@ return new class extends Migration
             $table->date('tgl_selesai');
             $table->timestamps();
 
-             $table->foreign('id_laporan')->references('id_laporan')->on('laporans')->onDelete('restrict');
             $table->foreign('id_user')->references('id_user')->on('users')->onDelete('restrict');
+            $table->foreign('id_laporan')->references('id_laporan')->on('laporans')->onDelete('restrict');
         });
     }
 

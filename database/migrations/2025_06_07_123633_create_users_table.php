@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('kode_pos');
             $table->string('kota');
             $table->string('provinsi');
+            $table->timestamps();
             $table->foreign('id_user')->references('id_akun')->on('akuns')->onDelete('restrict');
             $table->timestamps();
         });

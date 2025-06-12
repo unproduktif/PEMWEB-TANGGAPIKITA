@@ -1,24 +1,26 @@
 <?php
-
 namespace Database\Factories;
 
-namespace Database\Factories;
-
+use App\Models\Akun;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 
 class UserFactory extends Factory
 {
     protected $model = User::class;
 
-    public function definition(): array
+    public function definition()
     {
+        // Buat akun terlebih dahulu dengan role 'user'
+        $akunId = Akun::where('role', 'user')->inRandomOrder()->value('id_akun');
+
         return [
-            // Pastikan id_user mengacu pada id_akun yang valid
-            'id_user'   => fake()->numberBetween(1, 50), // sesuaikan dengan data di tabel akuns
-            'kode_pos'  => fake()->postcode(),
-            'kota'      => fake()->city(),
-            'provinsi'  => fake()->state(),
+            'id_user' => $akunId, // foreign key ke tabel akuns
+            'kode_pos' => $this->faker->postcode(),
+            'kota' => $this->faker->city(),
+            'provinsi' => $this->faker->state(),
         ];
     }
 }
+
