@@ -38,5 +38,4 @@ class Laporan extends Model
     {
         return $this->hasOne(Donasi::class, 'id_laporan', 'id_laporan');
     }
-
 }
