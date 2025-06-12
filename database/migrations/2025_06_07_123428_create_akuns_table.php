@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('no_hp');
             $table->string('alamat');
             $table->enum('role', ['user', 'admin'])->default('user');
-            $table->timestamp('tgl_register')->useCurrent();
+            $table->timestamps();
         });
     }
 

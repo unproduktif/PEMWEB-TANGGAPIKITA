@@ -1,44 +1,141 @@
+/* ===== Global ===== */
 body {
-        font-family: 'Poppins', sans-serif;
-        background-color: #e0f7fa; /* putih kebiruan muda */
-        }
+    font-family: 'Poppins', sans-serif;
+    background-color: #e0f7fa; /* putih kebiruan muda */
+    color: #333;
+    line-height: 1.6;
+}
 
-        .navbar {
-        background-color: #ffffff;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
+/* ===== Navbar ===== */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
 
-        .navbar-brand {
-        font-weight: 600;
-        color: #0277bd !important;
-        letter-spacing: 0.5px;
-        }
+.navbar-brand {
+    font-weight: 600;
+    color: #0277bd !important;
+    letter-spacing: 0.5px;
+}
 
-        .nav-link {
-        color: #0277bd !important;
-        font-weight: 500;
-        }
+.nav-link {
+    color: #0277bd !important;
+    font-weight: 500;
+    transition: 0.3s;
+}
 
-        .nav-link.active {
-        background-color: #1e90ff !important;
-        color: #e0f7fa !important;
-        border-radius: 0.4rem;
-        }
+.nav-link:hover {
+    color: #015a8a !important;
+}
 
-        .nav-link.disabled {
-        opacity: 0.5;
-        pointer-events: none;
-        }
+.nav-link.active {
+    background-color: #1e90ff !important;
+    color: #e0f7fa !important;
+    border-radius: 0.4rem;
+}
 
-        .btn-login {
-        background-color: #1e90ff;
-        color: white;
-        font-weight: 500;
-        padding: 6px 16px;
-        border-radius: 6px;
-        transition: background-color 0.3s;
-        }
+.nav-link.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
 
-        .btn-login:hover {
-        background-color: #0277bd;
-        }
+/* ===== Button Login ===== */
+.btn-login {
+    background-color: #1e90ff;
+    color: white;
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #0277bd;
+}
+
+/* ===== Button Utama ===== */
+.btn-primary {
+    background-color: #0277bd;
+    color: white;
+    font-weight: 500;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #015a8a;
+    color: white;
+}
+
+.btn-outline-primary {
+    border: 2px solid #0277bd;
+    color: #0277bd;
+    font-weight: 500;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0277bd;
+    color: white;
+}
+
+/* ===== Donasi Card ===== */
+.card-donasi {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-donasi:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Progress Bar ===== */
+.progress {
+    background-color: #cbeff8;
+    height: 18px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: #00c853;
+    font-weight: 500;
+}
+
+/* ===== Header Section ===== */
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-header h3 {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #0277bd;
+}
+
+.section-header p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* ===== Responsive Padding Section ===== */
+.section-padding {
+    padding: 60px 20px;
+}
+
+@media (min-width: 768px) {
+    .section-padding {
+        padding: 80px 40px;
+    }
+}
+
+/* ===== Filter Dropdown ===== */
+.dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
