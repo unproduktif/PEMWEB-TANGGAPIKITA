@@ -127,7 +127,6 @@
 </div>
 
 <script>
-    // Hover effect for profile photo
     document.addEventListener('DOMContentLoaded', function() {
         const fotoContainer = document.querySelector('.position-relative');
         if (fotoContainer) {
