@@ -3,8 +3,9 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonasiController;
-use App\Http\Controllers\LaporanController;
-
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
+use App\Http\Controllers\Admin\AkunController;
 
 Route::get('/', function () {
     return view('home');
@@ -22,6 +23,15 @@ Route::get('/register', [AuthController::class, 'formRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+});
+
+Route::middleware('admin')->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
 
 // BISA DIAKSES TANPA LOGIN
 Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('laporan.index');
@@ -40,3 +50,23 @@ Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.s
 
 
 Route::get('/bencana', [LaporanController::class, 'indexBencana'])->name('bencana');
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/profil', function () {
+        return view('admin.profil');
+    })->name('admin.profil');
+    Route::get('/admin/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
+    Route::patch('/admin/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
+    Route::patch('/admin/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
+    Route::patch('/admin/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
+
+});
+
+
+Route::prefix('admin/laporan')->group(function () {
+    Route::get('/', [AdminLaporanController::class, 'index'])->name('admin.laporan.index');
+    Route::patch('/verifikasi/{id}', [AdminLaporanController::class, 'verifikasi'])->name('admin.laporan.verifikasi');
+    Route::delete('/hapus/{id}', [AdminLaporanController::class, 'destroy'])->name('admin.laporan.hapus');
+});
+
