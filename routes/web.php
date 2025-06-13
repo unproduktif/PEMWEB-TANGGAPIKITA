@@ -15,11 +15,15 @@ Route::get('/bencana', function () {
     return view('pages.bencana');
 });
 
+
 Route::get('/lapor', function () {
     return view('pages.laporan');
 });
 
+Route::get('/lapor', [LaporanController::class, 'daftarLaporan'])->name('laporan.form');
 Route::post('/lapor', [LaporanController::class, 'store'])->name('laporan.store');
+
+
 
 
 Route::get('/donasi', function () {
