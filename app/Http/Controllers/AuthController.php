@@ -25,6 +25,11 @@ class AuthController extends Controller
 
         if ($akuns && Hash::check($credentials['password'], $akuns->password)) {
             Auth::login($akuns);
+
+            if ($akuns->role === 'admin') {
+                return redirect('/admin/dashboard')->with('success', 'Login berhasil sebagai admin!');
+            }
+
             return redirect()->route('home')->with('success', 'Login berhasil! Selamat datang, ' . $akuns->nama);
         }
 

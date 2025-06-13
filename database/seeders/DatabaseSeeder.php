@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\Laporan;
 use App\Models\Donasi;
 use App\Models\Edukasi;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Alokasi_dana;
 use App\Models\Laporan_donasi;
 use App\Models\User_donasi;
@@ -17,12 +18,20 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function run()
     {
-        // User::factory(10)->create();
+        // Buat 10 akun dulu
+        $akuns = Akun::factory(10)->create();
+        
+        Akun::create([
+        'nama' => 'Admin',
+        'email' => 'admin2@gmail.com',
+        'password' => Hash::make('admin123'),
+        'foto' => 'https://example.com/foto.jpg',
+        'no_hp' => '081234567890',
+        'alamat' => 'Alamat Admin',
+        'role' => 'admin',
+    ]);
 
         Akun::factory()->count(10)->create();
         Admin::factory()->count(3)->create();
