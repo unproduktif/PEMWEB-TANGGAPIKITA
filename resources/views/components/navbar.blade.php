@@ -20,7 +20,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('laporan-saya') ? 'active' : '' }}"
-                    href="{{ auth()->check() ? route('laporan.index') : route('login') }}">
+                    href="{{ route('laporan.index') }}">
                     Lapor
                     </a>
                 </li>

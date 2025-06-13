@@ -58,6 +58,23 @@
                     showConfirmButton: true
                 });
             @endif
+
+            document.getElementById('btn-buat-laporan').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Login Diperlukan',
+                    text: 'Anda harus login terlebih dahulu untuk membuat laporan.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login Sekarang',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('login') }}";
+                    }
+                });
+            });
         </script>
 
     </body>

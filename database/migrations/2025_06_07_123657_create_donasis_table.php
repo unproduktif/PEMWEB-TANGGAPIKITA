@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('donasis', function (Blueprint $table) {
             $table->id('id_donasi');
-            $table->unsignedBigInteger('id_laporan');
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_laporan');
             $table->string('judul');

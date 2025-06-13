@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 // buat data factory
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+
 
 class Akun extends Authenticatable
 {
+    use Notifiable;
     use HasFactory; //data factory
     protected $table = 'akuns';
     protected $primaryKey = 'id_akun';
