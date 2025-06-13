@@ -134,12 +134,18 @@ class LaporanController extends Controller
 
     public function laporanSaya()
     {
-        $userId = Auth::id();
-
-        $laporans = Laporan::where('id_user', $userId)->latest()->get();
+        if (Auth::check()) {
+            // Jika login, tampilkan laporan milik user
+            $userId = Auth::id();
+            $laporans = Laporan::where('id_user', $userId)->latest()->get();
+        } else {
+            // Jika belum login, tampilkan semua laporan yang sudah diverifikasi (atau sesuaikan logika kamu)
+            $laporans = Laporan::where('status', 'verifikasi')->latest()->get();
+        }
 
         return view('pages.laporan.index', compact('laporans'));
     }
+
 
 
 
