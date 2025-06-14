@@ -6,6 +6,7 @@ use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\AkunController;
+use App\Http\Controllers\LaporanController;
 
 Route::get('/', function () {
     return view('home');
@@ -43,10 +44,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
 });
 
+
 Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi.index');
 Route::get('/donasi/{id_donasi}', [DonasiController::class, 'show'])->name('donasi.show');
-Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
-Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.store');
+
+Route::middleware('auth')->group(function(){
+    // Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
+    // Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.store');
+    Route::get('/donasi/campaign/{id_laporan}', [DonasiController::class, 'createCampaign'])->name('donasi.createCampaign');
+    Route::post('/donasi/campaign/store', [DonasiController::class, 'storeCampaign'])->name('donasi.storeCampaign');
+});
 
 
 Route::get('/bencana', [LaporanController::class, 'indexBencana'])->name('bencana');
