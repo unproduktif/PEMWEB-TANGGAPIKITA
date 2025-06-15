@@ -110,7 +110,7 @@ class LaporanController extends Controller
             'deskripsi'  => 'required|string',
             'keterangan' => 'required|in:Banjir,Gempa,Kebakaran,Tanah Longsor,Lainnya',
             'lokasi'     => 'required|string|max:255',
-            'media'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'media'      => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $laporan = new Laporan();
@@ -144,6 +144,13 @@ class LaporanController extends Controller
         }
 
         return view('pages.laporan.index', compact('laporans'));
+    }
+
+
+
+    public function daftarLaporan() {
+        $laporans = Laporan::latest()->get();
+        return view('pages.daftarlaporan', compact('laporans'));
     }
 
 

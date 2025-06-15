@@ -60,7 +60,7 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'akuns' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\Akun::class),
         ],

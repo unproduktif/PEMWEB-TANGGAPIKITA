@@ -6,6 +6,8 @@ use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\AkunController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\Admin\EdukasiController;
 
 Route::get('/', function () {
     return view('home');
@@ -68,5 +70,15 @@ Route::prefix('admin/laporan')->group(function () {
     Route::get('/', [AdminLaporanController::class, 'index'])->name('admin.laporan.index');
     Route::patch('/verifikasi/{id}', [AdminLaporanController::class, 'verifikasi'])->name('admin.laporan.verifikasi');
     Route::delete('/hapus/{id}', [AdminLaporanController::class, 'destroy'])->name('admin.laporan.hapus');
+});
+
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('/edukasi', [EdukasiController::class, 'index'])->name('admin.edukasi.index');
+    Route::get('/edukasi/create', [EdukasiController::class, 'create'])->name('admin.edukasi.create');
+    Route::post('/edukasi', [EdukasiController::class, 'store'])->name('admin.edukasi.store');
+    Route::get('/edukasi/{id_edukasi}', [EdukasiController::class, 'show'])->name('admin.edukasi.show');
+    Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
+    Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
+    Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
 });
 

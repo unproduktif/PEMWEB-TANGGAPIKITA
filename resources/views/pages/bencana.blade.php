@@ -65,7 +65,7 @@
 
                         <a href="{{ route('laporan.show', $laporan->id_laporan) }}" class="btn btn-outline-primary">
                             <i class="bi bi-eye-fill me-1"></i> Lihat Detail
-                        </a>
+                        </a> 
                 </div>
             </div>
 
