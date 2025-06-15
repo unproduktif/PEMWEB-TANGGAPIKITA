@@ -28,7 +28,7 @@
 
     {{-- List Laporan --}}
     @auth
-        @forelse ($laporans as $laporan)
+        @forelse ($laporan as $laporan)
         <div class="card shadow border-0 rounded-4 bg-light mb-4">
             <div class="row g-0">
                 @if($laporan->media)
@@ -63,10 +63,10 @@
                             <a href="{{ route('laporan.show', $laporan->id_laporan) }}" class="btn btn-outline-primary px-4">
                                 <i class="bi bi-eye-fill me-1"></i> Lihat Detail
                             </a>
-                            <a href="{{ route('laporan.index', $laporan->id_laporan) }}" class="btn btn-warning">
+                            <a href="{{ route('laporan.edit', $laporan->id_laporan) }}" class="btn btn-warning">
                                 <i class="bi bi-pencil-fill me-1"></i> Edit
                             </a>
-                            <form action="{{ route('laporan.index', $laporan->id_laporan) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">
+                            <form action="{{ route('laporan.destroy', $laporan->id_laporan) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">

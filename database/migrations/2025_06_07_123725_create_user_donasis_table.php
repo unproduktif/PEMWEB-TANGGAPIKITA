@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_donasi');
             $table->unsignedBigInteger('id_user');
+            $table->enum('metode',['transfer', 'qris', 'e-wallet', 'lainnya']);
             $table->bigInteger('jumlah');
-            $table->timestamp('tanggal')->useCurrent();
+            $table->string('bukti')->nullable();
+            $table->text('pesan')->nullable();
             $table->timestamps();
             $table->foreign('id_donasi')->references('id_donasi')->on('donasis')->onDelete('restrict');
             $table->foreign('id_user')->references('id_user')->on('users')->onDelete('restrict');

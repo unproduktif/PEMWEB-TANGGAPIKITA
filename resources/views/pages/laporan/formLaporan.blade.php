@@ -47,7 +47,7 @@
 
                 <div class="mb-3">
                     <label for="media" class="form-label fw-semibold">Unggah Foto (Opsional)</label>
-                    <input type="file" name="media" id="media" class="form-control" accept="image/*">
+                    <input type="file" name="media" id="media" class="form-control" accept="image/*" required>
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
