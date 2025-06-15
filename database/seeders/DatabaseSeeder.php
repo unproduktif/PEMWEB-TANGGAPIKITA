@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Buat 10 akun dulu
-        $akuns = Akun::create([
+
+      $akuns = Akun::create([
         'nama' => 'Admin',
         'email' => 'admin@gmail.com',
         'password' => Hash::make('admin123'),

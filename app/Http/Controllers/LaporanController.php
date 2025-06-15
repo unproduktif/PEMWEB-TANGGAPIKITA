@@ -206,6 +206,13 @@ class LaporanController extends Controller
 
 
 
+    public function daftarLaporan() {
+        $laporans = Laporan::latest()->get();
+        return view('pages.daftarlaporan', compact('laporans'));
+    }
+
+
+
 
 }
 
