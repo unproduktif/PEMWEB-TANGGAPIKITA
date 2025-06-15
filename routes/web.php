@@ -8,8 +8,9 @@ use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\AkunController;
 use App\Http\Controllers\LaporanController;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::get('/', function () {
+    return view('home');
+})->name('home');
 
 Route::get('/home', function () {
     return view('home');
