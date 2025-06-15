@@ -1,7 +1,13 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DonasiController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
+use App\Http\Controllers\Admin\AkunController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\Admin\EdukasiController;
 
 Route::get('/', function () {
     return view('home');
@@ -9,29 +15,70 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     return view('home');
+})->name('home');
+
+
+// Auth Routes
+Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'formRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 });
 
-Route::get('/bencana', function () {
-    return view('pages.bencana');
+Route::middleware('admin')->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+// BISA DIAKSES TANPA LOGIN
+Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('laporan.index');
+
+// HARUS LOGIN
+Route::middleware('auth')->group(function () {
+    Route::get('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
+    Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+    Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
+});
+
+Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi.index');
+Route::get('/donasi/{id_donasi}', [DonasiController::class, 'show'])->name('donasi.show');
+Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
+Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.store');
+
+
+Route::get('/bencana', [LaporanController::class, 'indexBencana'])->name('bencana');
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/profil', function () {
+        return view('admin.profil');
+    })->name('admin.profil');
+    Route::get('/admin/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
+    Route::patch('/admin/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
+    Route::patch('/admin/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
+    Route::patch('/admin/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
+
 });
 
 
-Route::get('/lapor', function () {
-    return view('pages.laporan');
+Route::prefix('admin/laporan')->group(function () {
+    Route::get('/', [AdminLaporanController::class, 'index'])->name('admin.laporan.index');
+    Route::patch('/verifikasi/{id}', [AdminLaporanController::class, 'verifikasi'])->name('admin.laporan.verifikasi');
+    Route::delete('/hapus/{id}', [AdminLaporanController::class, 'destroy'])->name('admin.laporan.hapus');
 });
 
-Route::get('/lapor', [LaporanController::class, 'daftarLaporan'])->name('laporan.form');
-Route::post('/lapor', [LaporanController::class, 'store'])->name('laporan.store');
-
-
-
-
-Route::get('/donasi', function () {
-    return view('pages.donasi');
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('/edukasi', [EdukasiController::class, 'index'])->name('admin.edukasi.index');
+    Route::get('/edukasi/create', [EdukasiController::class, 'create'])->name('admin.edukasi.create');
+    Route::post('/edukasi', [EdukasiController::class, 'store'])->name('admin.edukasi.store');
+    Route::get('/edukasi/{id_edukasi}', [EdukasiController::class, 'show'])->name('admin.edukasi.show');
+    Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
+    Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
+    Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
 });
 
-Route::get('/bencana', [LaporanController::class, 'index']);
-
-Route::get('/laporans', [LaporanController::class, 'index'])->name('laporans.index');
-
-Route::get('/laporans/{laporan}', [LaporanController::class, 'show'])->name('laporans.show');

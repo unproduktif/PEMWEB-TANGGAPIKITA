@@ -15,6 +15,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_admin');
             $table->string('jabatan');
             $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
+            $table->timestamps();
+            
             $table->foreign('id_admin')->references('id_akun')->on('akuns')->onDelete('restrict');
         });
     }

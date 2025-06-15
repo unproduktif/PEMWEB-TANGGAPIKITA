@@ -1,1 +1,1 @@
-<x-layout></x-layout>
+@extends('components.layout')

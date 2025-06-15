@@ -4,7 +4,7 @@
 <div class="container mt-4 mb-4">
 
     {{-- Form Search --}}
-    <form method="GET" action="{{ route('laporans.index') }}" class="mb-4 d-flex justify-content-between flex-wrap gap-2">
+    <form method="GET" action="{{ route('laporan.index') }}" class="mb-4 d-flex justify-content-between flex-wrap gap-2">
         {{-- Search --}}
         <div class="input-group w-auto">
             <input type="text" name="search" class="form-control" placeholder="Cari informasi bencana..." value="{{ request('search') }}">
@@ -63,7 +63,7 @@
 
                         <p class="mt-2">{{ $laporan->deskripsi }}</p>
 
-                        <a href="{{ route('laporans.show', $laporan->id_laporan) }}" class="btn btn-outline-primary">
+                        <a href="{{ route('laporan.show', $laporan->id_laporan) }}" class="btn btn-outline-primary">
                             <i class="bi bi-eye-fill me-1"></i> Lihat Detail
                         </a> 
                 </div>

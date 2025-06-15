@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('judul');
             $table->text('konten');
             $table->string('gambar')->nullable();
-            $table->timestamp('tanggal')->useCurrent();
+            $table->timestamps();
             $table->foreign('id_admin')->references('id_admin')->on('admins')->onDelete('restrict');
         });
     }
