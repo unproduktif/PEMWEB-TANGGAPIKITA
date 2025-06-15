@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+
       $akuns = Akun::create([
         'nama' => 'Admin',
         'email' => 'admin@gmail.com',

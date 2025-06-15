@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Laporan;
+use App\Models\Donasi;
 use Illuminate\Support\Facades\Storage;
 
 class LaporanController extends Controller
@@ -107,7 +108,7 @@ class LaporanController extends Controller
     {
         $request->validate([
             'judul'      => 'required|string|max:255',
-            'deskripsi'  => 'required|string',
+            'deskripsi'  => 'required|string|max:1000',
             'keterangan' => 'required|in:Banjir,Gempa,Kebakaran,Tanah Longsor,Lainnya',
             'lokasi'     => 'required|string|max:255',
             'media'      => 'required|image|mimes:jpg,jpeg,png|max:2048',
@@ -132,18 +133,75 @@ class LaporanController extends Controller
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dikirim!');
     }
 
+    public function edit($id_laporan)
+    {
+        $laporan = Laporan::findOrFail($id_laporan);
+        return view('pages.laporan.editLaporan', compact('laporan'));
+    }
+
+    public function update(Request $request, $id_laporan)
+    {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'lokasi' => 'required|string|max:255',
+            'keterangan' => 'required|in:banjir,gempa,longsor,kebakaran,lainnya',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $laporan = Laporan::findOrFail($id_laporan);
+
+        $laporan->judul = $request->judul;
+        $laporan->deskripsi = $request->deskripsi;
+        $laporan->lokasi = $request->lokasi;
+        $laporan->keterangan = $request->keterangan;
+
+        if ($request->hasFile('foto')) {
+            $laporan->foto = $request->file('foto')->store('laporan', 'public');
+        }
+
+        $laporan->save();
+
+        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil diperbarui!');
+    }
+
+    public function destroy($id_laporan)
+    {
+        $laporan = Laporan::findOrFail($id_laporan);
+
+        // Misalnya hanya user yang punya laporan bisa hapus
+        if (auth()->id() !== $laporan->id_user) {
+            return redirect()->route('laporan.index')->with('error', 'Tidak punya akses hapus.');
+        }
+
+        // Hapus file foto jika ada
+        if ($laporan->foto) {
+            Storage::delete('public/' . $laporan->foto);
+        }
+
+        // Cek apakah laporan punya donasi
+        if ($laporan->donasi()->count() > 0) {
+            return redirect()->back()->with('error', 'Laporan ini memiliki donasi aktif. Harap hapus atau selesaikan donasi terlebih dahulu.');
+        }
+            $laporan->delete();
+
+            return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dihapus.');
+        }
+
+
+
     public function laporanSaya()
     {
         if (Auth::check()) {
             // Jika login, tampilkan laporan milik user
             $userId = Auth::id();
-            $laporans = Laporan::where('id_user', $userId)->latest()->get();
+            $laporan = Laporan::where('id_user', $userId)->latest()->get();
         } else {
             // Jika belum login, tampilkan semua laporan yang sudah diverifikasi (atau sesuaikan logika kamu)
-            $laporans = Laporan::where('status', 'verifikasi')->latest()->get();
+            $laporan = Laporan::where('status', 'verifikasi')->latest()->get();
         }
 
-        return view('pages.laporan.index', compact('laporans'));
+        return view('pages.laporan.index', compact('laporan'));
     }
 
 

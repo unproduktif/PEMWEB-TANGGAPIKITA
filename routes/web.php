@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\EdukasiController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 Route::get('/home', function () {
     return view('home');
@@ -43,12 +43,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
     Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
+    Route::get('/laporan/{id_laporan}/edit',[LaporanController::class, 'edit'])->name('laporan.edit');
+    Route::patch('/laporan/{id_laporan}', [LaporanController::class, 'update'])->name('laporan.update');
+    Route::delete('/laporan/{id_laporan}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
+
 });
+
 
 Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi.index');
 Route::get('/donasi/{id_donasi}', [DonasiController::class, 'show'])->name('donasi.show');
-Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
-Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.store');
+
+Route::middleware('auth')->group(function(){
+    Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
+    Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.store');
+    Route::get('/donasi/campaign/{id_laporan}', [DonasiController::class, 'createCampaign'])->name('donasi.createCampaign');
+    Route::post('/donasi/campaign/store', [DonasiController::class, 'storeCampaign'])->name('donasi.storeCampaign');
+});
 
 
 Route::get('/bencana', [LaporanController::class, 'indexBencana'])->name('bencana');
