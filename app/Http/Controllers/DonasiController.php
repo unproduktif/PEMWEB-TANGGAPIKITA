@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Donasi;
 use App\Models\Laporan;
@@ -103,4 +104,19 @@ class DonasiController extends Controller
 
         return redirect()->route('donasi.index')->with('success', 'Kampanye donasi berhasil dibuat!');
     }
+
+    public function riwayat()
+    {
+        $user = Auth::user();
+        $donasiRiwayat = $user->user->donasis; // relasi belongsToMany
+        return view('pages.donasi.riwayat', compact('donasiRiwayat'));
+    }
+
+    public function kelola()
+    {
+        $user = Auth::user();
+        $donasiKelola = $user->user->donasi; // relasi hasMany
+        return view('pages.donasi.kelola', compact('donasiKelola'));
+    }
+
 }

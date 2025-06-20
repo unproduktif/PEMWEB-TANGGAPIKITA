@@ -15,8 +15,10 @@ class User_donasi extends Model
     protected $fillable = [
         'id_donasi',
         'id_user',
+        'metode',
         'jumlah',
-        'tanggal',
+        'bukti',
+        'pesan',
     ];
 
     public function user()
