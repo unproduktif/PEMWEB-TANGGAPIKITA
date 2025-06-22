@@ -1,7 +1,7 @@
 @extends('components.admin-layout')
 
 @section('content')
-<div class="container py-4 mt-5">
+<div class="container mt-5 mb-5">
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show mb-4"> 
@@ -10,136 +10,110 @@
         </div>
     @endif
 
-    <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-body row p-4">
-            <div class="col-md-4 d-flex flex-column align-items-center justify-content-center mb-4 mb-md-0 position-relative" style="min-height: 300px;">
-                <div class="position-relative" style="width: 300px; height: 300px;">
-                    <!-- Foto Profil -->
-                    <img src="{{ auth()->user()->foto ? asset('storage/' . auth()->user()->foto) : asset('default-profile.png') }}" 
-                         class="rounded-circle border shadow-sm w-100 h-100" style="object-fit: cover;" alt="Foto Profil">
-                    
-                    @if(auth()->user()->foto)
-                        <!-- Overlay Edit Button (Hover Effect) -->
-                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-circle" 
-                             style="background: rgba(0,0,0,0.5); opacity: 0; transition: all 0.3s ease;">
-                            <button type="button" class="btn btn-outline-light rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#fotoModal">
-                                <i class="bi bi-camera me-1"></i> Edit Foto
-                            </button>
-                        </div>
-                    @else
-                        <!-- Add Photo Button -->
-                        <div class="position-absolute bottom-0 end-0">
-                            <button type="button" class="btn btn-primary rounded-circle p-3 shadow" data-bs-toggle="modal" data-bs-target="#fotoModal">
-                                <i class="bi bi-plus-lg fs-4"></i>
-                            </button>
-                        </div>
-                    @endif
-                </div>
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h3 class="fw-bold text-primary mb-4">
+            <i class="bi bi-person-circle me-2"></i> Profil Admin
+        </h3>
+
+        {{-- Section Informasi Profil --}}
+        <div class="row g-4 align-items-center mb-4 ">
+            <div class="col-lg-3 text-center">
+                @if(auth()->user()->foto)
+                    <img src="{{ asset('storage/' . auth()->user()->foto) }}" 
+                         class="rounded-circle shadow-sm border border-3 border-primary-subtle" width="130" height="130" style="object-fit: cover;" alt="Foto Profil">
+                @else
+                    <i class="bi bi-person-circle text-secondary" style="font-size: 110px;"></i>
+                @endif
+                <h5 class="mt-3 fw-semibold mb-0">{{ auth()->user()->nama }}</h5>
+                <span class="badge bg-primary-subtle text-primary text-capitalize">{{ auth()->user()->role }}</span>
             </div>
 
-            <div class="col-md-8 ps-md-4">
-                <!-- Form bagian kanan tetap sama -->
-                <form method="POST" action="{{ route('admin.profil.update') }}">
-                    @csrf
-                    @method('PATCH')
+            <div class="col-lg-9">
+                <div class="row">
+                    @php
+                        $profilData = [
+                            ['icon' => 'envelope', 'label' => 'Email', 'value' => auth()->user()->email],
+                        ];
+                    @endphp
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Nama</label>
-                        <input type="text" name="nama" value="{{ auth()->user()->nama }}" 
-                               class="form-control rounded-2" required>
+                    @foreach ($profilData as $item)
+                        <div class="col-sm-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-{{ $item['icon'] }} text-primary me-3 fs-5 mt-1"></i>
+                                <div>
+                                    <small class="text-muted">{{ $item['label'] }}</small>
+                                    <div class="fw-medium">{{ $item['value'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- Tombol Aksi --}}
+        <div class="d-flex flex-wrap gap-3 mb-4">
+            <button class="btn btn-outline-primary rounded-pill px-4" type="button" data-bs-toggle="collapse" data-bs-target="#formPerbarui">
+                <i class="bi bi-pencil me-1"></i> Perbarui Data
+            </button>
+            <button class="btn btn-outline-danger rounded-pill px-4" type="button" data-bs-toggle="collapse" data-bs-target="#formPassword">
+                <i class="bi bi-shield-lock me-1"></i> Ganti Password
+            </button>
+        </div>
+
+        {{-- Collapse: Perbarui Data --}}
+        <div class="collapse" id="formPerbarui">
+            <div class="border rounded-4 p-4 mb-4 bg-light">
+                <h5 class="text-primary fw-bold mb-3">
+                    <i class="bi bi-pencil-square me-2"></i> Form Perbarui Data
+                </h5>
+                <form action="{{ route('admin.profil.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf @method('PATCH')
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nama</label>
+                            <input type="text" name="nama" class="form-control" value="{{ old('nama', auth()->user()->nama) }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Foto Profil</label><br>
+                            @if(auth()->user()->foto)
+                                <img src="{{ asset('storage/' . auth()->user()->foto) }}" alt="Foto" width="100" class="rounded mb-2 d-block">
+                            @endif
+                            <input type="file" name="foto" class="form-control">
+                        </div>
                     </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Email</label>
-                        <input type="email" value="{{ auth()->user()->email }}" 
-                               class="form-control rounded-2" disabled>
-                    </div>
-
-                    <button class="btn btn-success px-4">
-                        <i class="bi bi-save me-1"></i> Simpan Perubahan 
-                    </button>
-                </form>
-
-                <hr class="my-4"> 
-
-                <form method="POST" action="{{ route('admin.password.update') }}">
-                    @csrf
-                    @method('PATCH')
-
-                    <h5 class="mb-3 fw-semibold">
-                        <i class="bi bi-key me-1"></i> Ubah Password
-                    </h5>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Password Baru</label>
-                        <input type="password" name="password" 
-                               class="form-control rounded-2" required>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Konfirmasi Password</label>
-                        <input type="password" name="password_confirmation" 
-                               class="form-control rounded-2" required>
-                    </div>
-
-                    <button class="btn btn-warning px-4">
-                        <i class="bi bi-arrow-repeat me-1"></i> Ubah Password
+                    <button type="submit" class="btn btn-success rounded-pill mt-3 px-4">
+                        <i class="bi bi-save me-1"></i> Simpan Perubahan
                     </button>
                 </form>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Modal Foto -->
-<div class="modal fade" id="fotoModal" tabindex="-1" aria-labelledby="fotoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form action="{{ route('admin.foto.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PATCH')
-                <div class="modal-header">
-                    <h5 class="modal-title" id="fotoModalLabel">
-                        {{ auth()->user()->foto ? 'Edit Foto Profil' : 'Tambah Foto Profil' }}
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+        {{-- Collapse: Ganti Password --}}
+        <div class="collapse" id="formPassword">
+            <div class="border rounded-4 p-4 bg-light">
+                <h5 class="text-danger fw-bold mb-3"><i class="bi bi-shield-lock me-2"></i> Form Ganti Password</h5>
+                <form action="{{ route('admin.password.update') }}" method="POST">
+                    @csrf @method('PATCH')
                     <div class="mb-3">
-                        <input type="file" name="foto" class="form-control" accept="image/*">
+                        <label class="form-label">Password Lama</label>
+                        <input type="password" name="password_lama" class="form-control" required>
                     </div>
-                    @if(auth()->user()->foto)
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hapus" id="hapusFoto" value="1">
-                            <label class="form-check-label text-danger" for="hapusFoto">
-                                Hapus Foto Profil
-                            </label>
-                        </div>
-                    @endif
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
+                    <div class="mb-3">
+                        <label class="form-label">Password Baru</label>
+                        <input type="password" name="password_baru" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Konfirmasi Password Baru</label>
+                        <input type="password" name="password_baru_confirmation" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">
+                        <i class="bi bi-key me-1"></i> Update Password
+                    </button>
+                </form>
+            </div>
         </div>
+
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const fotoContainer = document.querySelector('.position-relative');
-        if (fotoContainer) {
-            const overlay = fotoContainer.querySelector('.position-absolute.top-0');
-            if (overlay) {
-                fotoContainer.addEventListener('mouseenter', function() {
-                    overlay.style.opacity = '1';
-                });
-                fotoContainer.addEventListener('mouseleave', function() {
-                    overlay.style.opacity = '0';
-                });
-            }
-        }
-    });
-</script>
 @endsection
