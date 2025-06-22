@@ -67,4 +67,11 @@ class AkunController extends Controller
 
         return back()->with('success', 'Password berhasil diperbarui.');
     }
+
+    public function kelolaUser()
+    {
+        $users = \App\Models\User::with('akun')->get(); // pastikan relasi 'akun' sudah dibuat
+        return view('admin.akun.index', compact('users'));
+    }
+
 }

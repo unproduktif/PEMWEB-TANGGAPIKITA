@@ -21,8 +21,8 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ Request::is('admin/donasi*') ? 'active' : '' }}" href="/admin/donasi">
-                <i class="bi bi-cash-stack me-2"></i> Alokasi Donasi
+            <a class="nav-link {{ Request::is('admin/laporandonasi*') ? 'active' : '' }}" href="{{route('admin.laporandonasi.index')}}">
+                <i class="bi bi-info-circle me-2"></i> Alokasi Dana
             </a>
         </li>
         <li class="nav-item">

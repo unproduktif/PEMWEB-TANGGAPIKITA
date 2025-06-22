@@ -21,6 +21,7 @@ return new class extends Migration
             $table->bigInteger('total')->default(0);
             $table->date('tgl_mulai');
             $table->date('tgl_selesai');
+            $table->enum('status', ['berlangsung', 'selesai'])->default('berlangsung');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id_user')->on('users')->onDelete('restrict');

@@ -20,7 +20,7 @@
                 <i class="bi bi-journal-plus me-1"></i> Tambah Edukasi Baru
             </a>
         @else
-            <a href="#" class="btn btn-primary" id="btn-tambah-edukasi">
+            <a href="{{ route('admin.edukasi.create') }}" class="btn btn-primary" id="btn-tambah-edukasi">
                 <i class="bi bi-journal-plus me-1"></i> Tambah Edukasi Baru
             </a>
         @endauth

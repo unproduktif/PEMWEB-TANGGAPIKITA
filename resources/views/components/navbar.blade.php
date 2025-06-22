@@ -48,7 +48,21 @@
                         @if(auth()->user()->role === 'admin')
                             <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard Admin</a></li>
                         @else
-                            <li><a class="dropdown-item" href="/user/profil"><i class="bi bi-person-circle me-2"></i>Profil</a></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profil') }}">
+                                    <i class="bi bi-person-circle me-2"></i>Profil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('donasi.riwayat') }}">
+                                    <i class="bi bi-clock-history me-2"></i>Riwayat Donasi
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('donasi.kelola') }}">
+                                    <i class="bi bi-gear me-2"></i>Kelola Donasi
+                                </a>
+                            </li>
                         @endif
 
                         <li><hr class="dropdown-divider"></li>

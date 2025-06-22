@@ -40,34 +40,50 @@
     <div class="row g-3">
         @forelse ($laporans as $laporan)
             <div class="col-md-12">
-                <div class="card shadow border-start border-light-subtle rounded-4 bg-light
-                    @if($laporan->status == 'verifikasi')
-                    @else border-secondary @endif border-5">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $laporan->judul }}</h5>
-                        <p class="mb-1">
-                            <strong><i class="bi bi-geo-alt-fill me-1 text-danger"></i> Lokasi:</strong> {{ $laporan->lokasi }}
-                        </p>
-                        <p class="mb-1">
-                            <strong><i class="bi bi-clock-fill me-1 text-primary"></i> Dipublikasikan:</strong>
-                            {{ \Carbon\Carbon::parse($laporan->tgl_publish)->translatedFormat('d M Y H:i') }}
-                        </p>
-                        <p class="mb-1">
-                            <strong><i class="bi bi-shield-check me-1 text-success"></i> Status:</strong>
-                            <span class="badge 
-                                @if($laporan->status == 'verifikasi') bg-success-subtle text-success-emphasis
-                                @else bg-secondary-subtle text-secondary-emphasis @endif">
-                                {{ ucfirst($laporan->status) }}
-                            </span>
-                        </p>
+                <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                    <div class="row g-0">
+                        {{-- Gambar Laporan --}}
+                        <div class="col-md-4">
+                            @if ($laporan->media)
+                                <img src="{{ asset('storage/' . $laporan->media) }}" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 240px;" alt="Foto Laporan">
+                            @else
+                                <img src="{{ asset('images/default-laporan.jpg') }}" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 240px;" alt="Foto Default">
+                            @endif
+                        </div>
 
-                        <p class="mt-2">{{ $laporan->deskripsi }}</p>
+                        {{-- Konten Laporan --}}
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $laporan->judul }}</h5>
+                                <p class="mb-1">
+                                    <strong><i class="bi bi-person-circle me-1 text-dark"></i> Dibuat oleh:</strong> {{ $laporan->user->akun->nama ?? 'Anonim' }}
+                                </p>
+                                <p class="mb-1">
+                                    <strong><i class="bi bi-geo-alt-fill me-1 text-danger"></i> Lokasi:</strong> {{ $laporan->lokasi }}
+                                </p>
+                                <p class="mb-1">
+                                    <strong><i class="bi bi-clock-fill me-1 text-primary"></i> Dipublikasikan:</strong>
+                                    {{ \Carbon\Carbon::parse($laporan->tgl_publish)->translatedFormat('d M Y H:i') }}
+                                </p>
+                                <p class="mb-1">
+                                    <strong><i class="bi bi-shield-check me-1 text-success"></i> Status:</strong>
+                                    <span class="badge 
+                                        @if($laporan->status == 'verifikasi') bg-success-subtle text-success-emphasis
+                                        @else bg-secondary-subtle text-secondary-emphasis @endif">
+                                        {{ ucfirst($laporan->status) }}
+                                    </span>
+                                </p>
+                                <p class="mt-2">{{ Str::limit($laporan->deskripsi, 160) }}</p>
 
-                        <a href="{{ route('laporan.show', $laporan->id_laporan) }}" class="btn btn-outline-primary">
-                            <i class="bi bi-eye-fill me-1"></i> Lihat Detail
-                        </a> 
+                                <a href="{{ route('laporan.show', $laporan->id_laporan) }}" class="btn btn-outline-primary btn-sm mt-2">
+                                    <i class="bi bi-eye-fill me-1"></i> Lihat Detail
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
 
         @empty
             <p class="text-center">Belum ada laporan bencana yang sesuai.</p>

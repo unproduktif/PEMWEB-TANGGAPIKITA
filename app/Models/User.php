@@ -35,7 +35,7 @@ class User extends Model
     public function donasis()
     {
         return $this->belongsToMany(Donasi::class, 'user_donasis', 'id_user', 'id_donasi')
-                    ->withPivot('jumlah', 'tanggal')
+                    ->withPivot('metode', 'jumlah', 'pesan', 'order_id', 'status')
                     ->withTimestamps();
     }
 }

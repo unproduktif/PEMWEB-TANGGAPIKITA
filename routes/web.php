@@ -6,16 +6,19 @@ use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\AkunController;
+use App\Http\Controllers\Admin\InformasiController;
+use App\Http\Controllers\Admin\LaporanDonasiController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Admin\EdukasiController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MidtransController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index']);
 
 
 // Auth Routes
@@ -35,6 +38,30 @@ Route::middleware('admin')->group(function () {
     })->name('admin.dashboard');
 });
 
+Route::prefix('admin/informasi')->middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/', [InformasiController::class, 'index'])->name('admin.informasi.index');
+    Route::get('/admin/informasi/{id}', [InformasiController::class, 'show'])->name('admin.informasi.show');
+    Route::delete('/hapus/{id}', [InformasiController::class, 'destroy'])->name('admin.informasi.destroy');
+});
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/admin/user', [AkunController::class, 'kelolaUser'])->name('admin.user.index');
+});
+
+Route::prefix('admin/laporandonasi')->middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\LaporanDonasiController::class, 'index'])->name('admin.laporandonasi.index');
+    Route::get('/buat/{id_donasi}', [App\Http\Controllers\Admin\LaporanDonasiController::class, 'create'])->name('admin.laporandonasi.create');
+    Route::post('/simpan/{id_donasi}', [App\Http\Controllers\Admin\LaporanDonasiController::class, 'store'])->name('admin.laporandonasi.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profil', [App\Http\Controllers\UserController::class, 'index'])->name('profil');
+    Route::patch('/profil', [App\Http\Controllers\UserController::class, 'update'])->name('profil.update');
+    Route::patch('/profil/foto', [App\Http\Controllers\UserController::class, 'updateFoto'])->name('foto.update');
+    Route::patch('/profil/password', [App\Http\Controllers\UserController::class, 'updatePassword'])->name('password.update');
+});
+
+
 // BISA DIAKSES TANPA LOGIN
 Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('laporan.index');
 
@@ -49,16 +76,32 @@ Route::middleware('auth')->group(function () {
 
 });
 
-
-Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi.index');
-Route::get('/donasi/{id_donasi}', [DonasiController::class, 'show'])->name('donasi.show');
-
 Route::middleware('auth')->group(function(){
     Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
     Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.store');
     Route::get('/donasi/campaign/{id_laporan}', [DonasiController::class, 'createCampaign'])->name('donasi.createCampaign');
     Route::post('/donasi/campaign/store', [DonasiController::class, 'storeCampaign'])->name('donasi.storeCampaign');
+    Route::get('donasi/edit/{id_donasi}', [DonasiController::class, 'edit'])->name('donasi.edit');
+    Route::put('/donasi/update/{id_donasi}', [DonasiController::class, 'update'])->name('donasi.update');
+    Route::put('donasi/selesaikan/{id_donasi}', [DonasiController::class, 'selesaikan'])->name('donasi.selesaikan');
+    Route::get('/donasi/riwayat', [DonasiController::class, 'riwayat'])->name('donasi.riwayat');
+    Route::get('/donasi/kelola', [DonasiController::class, 'kelola'])->name('donasi.kelola');
+    Route::post('/donasi/midtrans', [DonasiController::class, 'createMidtrans'])->name('donasi.midtrans');
+    Route::get('/donasi/payment/{order_id}', [DonasiController::class, 'redirectToPayment'])
+    ->name('donasi.payment.redirect');
+    // Untuk redirect setelah pembayaran sukses
+    Route::get('/donasi/sukses', function () {
+        return view('pages.donasi.sukses');
+    })->name('donasi.sukses');
+
+    // Untuk redirect ketika pembayaran pending
+    Route::get('/donasi/pending', function () {
+        return view('pages.donasi.pending');
+    })->name('donasi.pending');
+        
 });
+Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi.index');
+Route::get('/donasi/{id_donasi}', [DonasiController::class, 'show'])->name('donasi.show');
 
 
 Route::get('/bencana', [LaporanController::class, 'indexBencana'])->name('bencana');
@@ -83,12 +126,13 @@ Route::prefix('admin/laporan')->group(function () {
 });
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('/edukasi/create', [EdukasiController::class, 'create'])->name('admin.edukasi.create'); // letakkan ini di atas
     Route::get('/edukasi', [EdukasiController::class, 'index'])->name('admin.edukasi.index');
-    Route::get('/edukasi/create', [EdukasiController::class, 'create'])->name('admin.edukasi.create');
     Route::post('/edukasi', [EdukasiController::class, 'store'])->name('admin.edukasi.store');
     Route::get('/edukasi/{id_edukasi}', [EdukasiController::class, 'show'])->name('admin.edukasi.show');
     Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
     Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
     Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
 });
+
 
