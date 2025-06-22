@@ -19,7 +19,7 @@ class AlokasiDana extends Model
 
     public function laporanDonasi()
     {
-        return $this->belongsTo(Laporan_donasi::class, 'id_laporandonasi', 'id_laporandonasi');
+        return $this->belongsTo(LaporanDonasi::class, 'id_laporandonasi', 'id_laporandonasi');
     }
     //
 }

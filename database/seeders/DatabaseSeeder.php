@@ -9,8 +9,8 @@ use App\Models\Laporan;
 use App\Models\Donasi;
 use App\Models\Edukasi;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Alokasi_dana;
-use App\Models\Laporan_donasi;
+use App\Models\AlokasiDana;
+use App\Models\LaporanDonasi;
 use App\Models\User_donasi;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -43,8 +43,8 @@ class DatabaseSeeder extends Seeder
         // Laporan::factory()->count(10)->create();
         // Donasi::factory(10)->create();
         // User_donasi::factory(20)->create();
-        // Laporan_donasi::factory(10)->create();
-        // Alokasi_dana::factory(20)->create();
+        // LaporanDonasi::factory(10)->create();
+        // AlokasiDana::factory(20)->create();
         // Edukasi::factory(10)->create();
 
 

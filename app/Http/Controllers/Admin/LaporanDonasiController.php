@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Donasi;
-use App\Models\Laporan_donasi;
-use App\Models\Alokasi_dana;
+use App\Models\LaporanDonasi;
+use App\Models\AlokasiDana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,9 +35,9 @@ class LaporanDonasiController extends Controller
             'alokasi.*.jumlah' => 'required|numeric',
         ]);
 
-        $laporan = Laporan_donasi::create([
+        $laporan = LaporanDonasi::create([
             'id_donasi' => $id_donasi,
-            'id_admin' => Auth::guard('admin')->id(), // pastikan guard admin
+            'id_admin' => Auth::user()->id_akun, // pastikan guard admin
             'deskripsi' => $request->deskripsi,
             'total' => $request->total,
             'sisa' => $request->sisa,
@@ -45,7 +45,7 @@ class LaporanDonasiController extends Controller
         ]);
 
         foreach ($request->alokasi as $item) {
-            Alokasi_dana::create([
+            AlokasiDana::create([
                 'id_laporandonasi' => $laporan->id_laporandonasi,
                 'keterangan' => $item['keterangan'],
                 'tujuan' => $item['tujuan'],
