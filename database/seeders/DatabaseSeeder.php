@@ -36,6 +36,42 @@ class DatabaseSeeder extends Seeder
         'jabatan' => 'Administrator',
         'status' => 'aktif',
     ]);
+    
+    // Akun User 1
+    $akunUser1 = Akun::create([
+        'nama' => 'User Satu',
+        'email' => 'user1@gmail.com',
+        'password' => Hash::make('user123'),
+        'foto' => 'https://example.com/user1.jpg',
+        'no_hp' => '081111111111',
+        'alamat' => 'Alamat User 1',
+        'role' => 'user',
+    ]);
+
+    User::create([
+        'id_user' => $akunUser1->id_akun,
+        'kode_pos' => '12345',
+        'kota' => 'Jakarta',
+        'provinsi' => 'DKI Jakarta',
+    ]);
+
+    // Akun User 2
+    $akunUser2 = Akun::create([
+        'nama' => 'User Dua',
+        'email' => 'user2@gmail.com',
+        'password' => Hash::make('user123'),
+        'foto' => 'https://example.com/user2.jpg',
+        'no_hp' => '082222222222',
+        'alamat' => 'Alamat User 2',
+        'role' => 'user',
+    ]);
+
+    User::create([
+        'id_user' => $akunUser2->id_akun,
+        'kode_pos' => '54321',
+        'kota' => 'Bandung',
+        'provinsi' => 'Jawa Barat',
+    ]);
 
         // Akun::factory()->count(10)->create();
         // Admin::factory()->count(3)->create();
