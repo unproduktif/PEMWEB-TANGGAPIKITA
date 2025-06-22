@@ -5,26 +5,57 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class InformasiController extends Controller
 {
-    // Tampilkan semua laporan yang sudah diverifikasi
-    public function index()
+    public function index(Request $request)
     {
-        $laporans = Laporan::where('status', 'verifikasi')->latest()->get();
-        return view('admin.informasi.index', compact('laporans'));
-    }
+        $query = Laporan::query()->with('user.akun');
+        $query->where('status', 'verifikasi');
 
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                  ->orWhere('lokasi', 'like', "%{$search}%");
+            });
+        }
+        if ($request->filled('jenis_bencana')) {
+            $query->where('keterangan', $request->jenis_bencana);
+        }
+        if ($request->filled('waktu')) {
+            $now = Carbon::now();
+            switch ($request->waktu) {
+                case 'hari_ini':
+                    $query->whereDate('tgl_publish', $now->toDateString());
+                    break;
+                case 'minggu_ini':
+                    $query->whereBetween('tgl_publish', [$now->startOfWeek(), $now->endOfWeek()]);
+                    break;
+                case 'bulan_ini':
+                    $query->whereMonth('tgl_publish', $now->month)
+                          ->whereYear('tgl_publish', $now->year);
+                    break;
+                case 'tahun_ini':
+                    $query->whereYear('tgl_publish', $now->year);
+                    break;
+            }
+        }
+        $laporans = $query->orderBy('tgl_publish', 'desc')->paginate(10);
+        $jenisBencana = ['Banjir', 'Gempa', 'Kebakaran', 'Tanah Longsor', 'Lainnya'];
+        return view('admin.informasi.index', compact('laporans', 'jenisBencana'));
+    }
     public function show($id)
     {
-        $laporan = Laporan::with(['user.akun'])->findOrFail($id);
+        $laporan = Laporan::with('user.akun')->findOrFail($id);
         return view('admin.informasi.show', compact('laporan'));
     }
 
-
-    // Hapus informasi
     public function destroy($id)
     {
         $laporan = Laporan::findOrFail($id);
@@ -32,7 +63,6 @@ class InformasiController extends Controller
             Storage::delete('public/' . $laporan->media);
         }
         $laporan->delete();
-
         return redirect()->route('admin.informasi.index')->with('success', 'Informasi berhasil dihapus.');
     }
 }
