@@ -41,6 +41,9 @@ class DonasiController extends Controller
     public function createForm($id_donasi)
     {
         $donasi = Donasi::findOrFail($id_donasi);
+        if($donasi->status !=='berlangsung'){
+            return redirect()->route('donasi.index')->with('error','Donasi ini sudah ditutup.');
+        }
         return view('pages.donasi.formDonasi', compact('donasi'));
     }
 
@@ -80,6 +83,11 @@ class DonasiController extends Controller
         // Validasi user adalah pemilik
         if (auth()->user()->id_akun !== $laporan->id_user || $laporan->status !== 'verifikasi') {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk membuat kampanye donasi.');
+        }
+
+        $sudahAdaKampanye = Donasi::where('id_laporan', $laporan->id_laporan)->exists();
+        if ($sudahAdaKampanye) {
+            return redirect()->back()->with('error', 'Laporan ini sudah memiliki kampanye donasi.');
         }
 
         return view('pages.donasi.form', compact('laporan'));
