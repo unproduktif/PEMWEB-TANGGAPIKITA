@@ -95,23 +95,6 @@ class LaporanDonasiController extends Controller
             'alokasi.*.jumlah.min' => 'Minimal alokasi dana Rp 1.000'
         ]);
 
-        $laporan = LaporanDonasi::create([
-            'id_donasi' => $id_donasi,
-            'id_admin' => Auth::user()->id_akun, // pastikan guard admin
-            'deskripsi' => $request->deskripsi,
-            'total' => $request->total,
-            'sisa' => $request->sisa,
-            'tanggal' => $request->tanggal,
-        ]);
-
-        foreach ($request->alokasi as $item) {
-            AlokasiDana::create([
-                'id_laporandonasi' => $laporan->id_laporandonasi,
-                'keterangan' => $item['keterangan'],
-                'tujuan' => $item['tujuan'],
-                'jumlah' => $item['jumlah'],
-            ]);
-
         $totalAlokasi = collect($request->alokasi)->sum('jumlah');
         if ($totalAlokasi > $request->total - $request->sisa) {
             return back()->withErrors([
