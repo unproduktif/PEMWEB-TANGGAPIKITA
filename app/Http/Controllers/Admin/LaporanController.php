@@ -8,11 +8,30 @@ use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $laporans = Laporan::latest()->get();
+        $query = Laporan::with('user.akun'); // biar gak N+1, opsional
+
+        // Search
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('judul', 'like', '%' . $request->search . '%')
+                ->orWhere('lokasi', 'like', '%' . $request->search . '%')
+                ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter status
+        if ($request->filled('filter_status')) {
+            $query->where('status', $request->filter_status);
+        }
+
+        // Pagination
+        $laporans = $query->orderBy('created_at', 'desc')->paginate(10);
+
         return view('admin.laporan.index', compact('laporans'));
     }
+
 
     public function verifikasi($id)
     {
