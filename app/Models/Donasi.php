@@ -19,6 +19,7 @@ class Donasi extends Model
         'total',
         'tgl_mulai',
         'tgl_selesai',
+        'status',
     ];
 
     public function user()
@@ -40,7 +41,7 @@ class Donasi extends Model
 
     public function laporanDonasi()
     {
-        return $this->hasOne(LaporanDonasi::class, 'id_donasi', 'id_donasi');
+        return $this->hasOne(Laporan_donasi::class, 'id_donasi', 'id_donasi');
     }
 
 }

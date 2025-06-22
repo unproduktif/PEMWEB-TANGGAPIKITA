@@ -41,7 +41,7 @@
 
                 {{-- Tombol Aksi --}}
                 <div class="mt-4 d-flex flex-wrap gap-2">
-                    <a href="{{ route('donasi.index') }}" class="btn btn-outline-secondary px-4">
+                    <a href="{{ url()->previous() }}" class="btn btn-outline-secondary px-4">
                         <i class="bi bi-arrow-left me-1"></i> Kembali
                     </a>
                     <a href="{{ route('donasi.form', $donasi->id_donasi) }}" class="btn btn-success">

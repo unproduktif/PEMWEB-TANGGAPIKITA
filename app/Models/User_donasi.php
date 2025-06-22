@@ -17,8 +17,9 @@ class User_donasi extends Model
         'id_user',
         'metode',
         'jumlah',
-        'bukti',
         'pesan',
+        'order_id',
+        'status',
     ];
 
     public function user()

@@ -46,7 +46,7 @@
                     <p class="text-muted">{{ $laporan->keterangan }}</p>
                 </div>
 
-                <a href="{{ route('laporan.index') }}" class="btn btn-secondary mt-4">
+                <a href="{{ url()->previous()}}" class="btn btn-secondary mt-4">
                     <i class="bi bi-arrow-left me-1"></i> Kembali
                 </a>
 

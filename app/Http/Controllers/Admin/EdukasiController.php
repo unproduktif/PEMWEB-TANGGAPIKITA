@@ -14,7 +14,7 @@ class EdukasiController extends Controller
     public function index()
     {
         $edukasis = Edukasi::with('admin')->latest()->get();
-        return view('admin.Edukasi.index', compact('edukasis'));
+        return view('admin.edukasi.index', compact('edukasis'));
     }
 
     // Tampilkan form tambah edukasi
@@ -74,7 +74,7 @@ class EdukasiController extends Controller
         $edukasi = Edukasi::findOrFail($id);
         $edukasi->judul = $request->judul;
         $edukasi->konten = $request->konten;
-      
+
         // Update gambar jika ada file baru
         if ($request->hasFile('gambar')) {
             if ($edukasi->gambar) {
