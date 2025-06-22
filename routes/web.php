@@ -45,7 +45,7 @@ Route::prefix('admin/informasi')->middleware(['auth', 'is_admin'])->group(functi
 });
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
-    Route::get('/admin/user', [AkunController::class, 'kelolaUser'])->name('admin.user.index');
+    Route::get('/admin/user', [AkunController::class, 'index'])->name('admin.user.index');
 });
 
 Route::prefix('admin/laporandonasi')->middleware(['auth', 'is_admin'])->group(function () {
@@ -133,6 +133,19 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
     Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
     Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
+    Route::resource('akun', AkunController::class)->except(['show'])->names([
+        'index' => 'admin.akun.index',
+        'create' => 'admin.akun.create',
+        'store' => 'admin.akun.store',
+        'edit' => 'admin.akun.edit',
+        'update' => 'admin.akun.update',
+        'destroy' => 'admin.akun.destroy'
+    ]);
+    
+    // Keep your existing profile routes
+    Route::get('/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
+    Route::patch('/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
+    Route::patch('/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
+    Route::patch('/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
 });
-
 
