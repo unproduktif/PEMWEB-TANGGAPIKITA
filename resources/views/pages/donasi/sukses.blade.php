@@ -1,6 +1,21 @@
 @extends('components.layout')
 
 @section('content')
+@php
+    $user = auth()->user();
+
+    $donasi = \App\Models\User_donasi::where('id_user', $user->id_akun)
+        ->latest()
+        ->first();
+    $metode = $userDonasiTerakhir->metode ?? 'bank_transfer';
+    $labelMetode = match($metode) {
+        'bank_transfer' => 'Transfer Bank',
+        'qris' => 'QRIS',
+        'e-wallet' => 'E-Wallet',
+        'lainnya' => 'Lainnya',
+        default => ucfirst($metode),
+    };
+@endphp
 <div class="container py-4 py-md-5">
 
     {{-- Success Hero Section --}}
@@ -31,38 +46,38 @@
                 <div class="card-header border-0 py-3" style="background-color: #222831;">
                     <h5 class="mb-0 text-center text-white">Detail Donasi</h5>
                 </div>
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between mb-3">
-                        <span style="color: #393E46;">Status Donasi</span>
-                        <span class="badge rounded-pill py-2 px-3" style="background-color: rgba(0, 173, 181, 0.1); color: #00ADB5;">
-                            <i class="bi bi-check-circle-fill me-1"></i> Berhasil
-                        </span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span style="color: #393E46;">Jumlah Donasi</span>
-                        <span style="color: #222831; font-weight: 500;">Rp{{ number_format($donation->amount ?? 0, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span style="color: #393E46;">Tanggal</span>
-                        <span style="color: #222831;">{{ now()->format('d M Y, H:i') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <span style="color: #393E46;">Metode Pembayaran</span>
-                        <span style="color: #222831;">{{ $donation->payment_method ?? 'Transfer Bank' }}</span>
-                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span style="color: #393E46;">Status Donasi</span>
+                            <span class="badge rounded-pill py-2 px-3" style="background-color: rgba(0, 173, 181, 0.1); color: #00ADB5;">
+                                <i class="bi bi-check-circle-fill me-1"></i> Berhasil
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span style="color: #393E46;">Jumlah Donasi</span>
+                            <span style="color: #222831; font-weight: 500;">Rp{{ number_format($donasi->jumlah ?? 0, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span style="color: #393E46;">Tanggal</span>
+                            <span style="color: #222831;">{{ now()->format('d M Y, H:i') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span style="color: #393E46;">Metode Pembayaran</span>
+                            <span style="color: #222831;">{{ $labelMetode }}</span>
+                        </div>
 
-                    <div class="alert alert-light mt-4 mb-0 border-0" style="background-color: #EEEEEE;">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-receipt me-3" style="font-size: 1.5rem; color: #00ADB5;"></i>
-                            <div>
-                                <p class="mb-0 fw-medium" style="color: #222831;">
-                                    Invoice telah dikirim ke email Anda
-                                </p>
-                                <small class="text-muted">Periksa folder spam jika tidak ditemukan</small>
+                        <div class="alert alert-light mt-4 mb-0 border-0" style="background-color: #EEEEEE;">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-receipt me-3" style="font-size: 1.5rem; color: #00ADB5;"></i>
+                                <div>
+                                    <p class="mb-0 fw-medium" style="color: #222831;">
+                                        Invoice telah dikirim ke email Anda
+                                    </p>
+                                    <small class="text-muted">Periksa folder spam jika tidak ditemukan</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -110,7 +125,7 @@
         <a href="{{ route('donasi.index') }}" class="btn px-4 py-2 me-3" style="background-color: #00ADB5; color: white;">
             <i class="bi bi-heart-fill me-2"></i> Donasi Lagi
         </a>
-        <a href="{{ route('dashboard') }}" class="btn px-4 py-2" style="background-color: #393E46; color: white;">
+        <a href="{{ route('home') }}" class="btn px-4 py-2" style="background-color: #393E46; color: white;">
             <i class="bi bi-house-door me-2"></i> Kembali ke Beranda
         </a>
     </div>

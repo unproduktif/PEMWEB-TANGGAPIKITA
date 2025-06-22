@@ -18,6 +18,7 @@ class LaporanController extends Controller
     {
         $laporan = Laporan::findOrFail($id);
         $laporan->status = 'verifikasi';
+        $laporan->tgl_publish = now();
         $laporan->save();
 
         return redirect()->back()->with('success', 'Laporan berhasil diverifikasi.');

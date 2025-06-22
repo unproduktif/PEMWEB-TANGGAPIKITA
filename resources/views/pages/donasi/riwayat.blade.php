@@ -29,7 +29,7 @@
                 </div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle" style="border-color: #393E46;">
+                    <table class="table table-hover align-" style="border-color: #393E46;">
                         <thead style="background-color: #222831; color: #EEEEEE;">
                             <tr>
                                 <th style="width: 5%;">#</th>
@@ -37,7 +37,7 @@
                                 <th style="width: 15%;">Jumlah</th>
                                 <th style="width: 20%;">Tanggal</th>
                                 <th style="width: 15%;">Status</th>
-                                <th style="width: 20%;">Aksi</th>
+                                <th class="text-center" style="width: 20%;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,10 +79,24 @@
                                     <td>
                                         @if ($status === 'pending' && !empty($donasi->pivot->order_id))
                                             <a href="{{ route('donasi.payment.redirect', ['order_id' => $donasi->pivot->order_id]) }}" 
-                                               class="btn btn-sm btn-hover rounded-pill px-3" 
-                                               style="border: 1px solid #00ADB5; color: #00ADB5;">
+                                            class="btn btn-sm btn-hover rounded-pill px-3" 
+                                            style="border: 1px solid #00ADB5; color: #00ADB5;">
                                                 <i class="bi bi-cash-coin me-1"></i> Lanjutkan Pembayaran
                                             </a>
+                                        @elseif (in_array($status, ['settlement', 'capture']))
+                                            @php
+                                                $alokasi = $donasi->alokasi_dana ?? null;
+                                            @endphp
+
+                                            @if ($alokasi)
+                                                <span class="badge rounded-pill bg-success bg-opacity-10 text-success py-2 px-3">
+                                                    <i class="bi bi-check-circle-fill me-1"></i> Alokasi Dana Selesai
+                                                </span>
+                                            @else
+                                                <span class="badge rounded-pill bg-warning bg-opacity-10 text-dark py-2 px-3">
+                                                    <i class="bi bi-hourglass-split me-1"></i> Alokasi dalam Proses
+                                                </span>
+                                            @endif
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif

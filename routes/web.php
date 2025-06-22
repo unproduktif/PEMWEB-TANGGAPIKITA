@@ -69,12 +69,12 @@ Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('la
 Route::middleware('auth')->group(function () {
     Route::get('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
-    Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
     Route::get('/laporan/{id_laporan}/edit',[LaporanController::class, 'edit'])->name('laporan.edit');
     Route::patch('/laporan/{id_laporan}', [LaporanController::class, 'update'])->name('laporan.update');
     Route::delete('/laporan/{id_laporan}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
-
+    
 });
+Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
 
 Route::middleware('auth')->group(function(){
     Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
@@ -135,4 +135,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
 });
 
+Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
+Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 

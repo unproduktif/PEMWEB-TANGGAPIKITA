@@ -54,12 +54,11 @@
                                         {{ ucfirst($status) }}
                                     </span>
                                 </td>
-                                <td class="text-center d-flex gap-2 justify-content-center flex-wrap">
-                                    {{-- Tombol Detail --}}
-                                    <a href="{{ route('donasi.show', $donasi->id_donasi) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                        <i class="bi bi-eye-fill me-1"></i> Detail
-                                    </a>
-
+                                <td class="text-center text-nowrap">
+                                    <div class="d-flex gap-2 justify-content-center flex-nowrap">
+                                        <a href="{{ route('donasi.show', $donasi->id_donasi) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            <i class="bi bi-eye-fill me-1"></i> Detail
+                                        </a>
                                     {{-- Jika status sedang berlangsung, tampilkan Edit dan Selesaikan --}}
                                     @if($donasi->status === 'berlangsung')
                                         <a href="{{ route('donasi.edit', $donasi->id_donasi) }}" class="btn btn-sm btn-outline-warning rounded-pill px-3">

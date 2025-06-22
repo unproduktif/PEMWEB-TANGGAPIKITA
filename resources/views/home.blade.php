@@ -153,10 +153,25 @@
                             <div class="mb-2 mb-md-3">
                                 <div class="d-flex justify-content-between mb-1">
                                     <small class="text-muted" style="font-size: 0.75rem; font-size-md: 0.875rem;">Terkumpul</small>
-                                    <small class="fw-bold" style="color: #8DBCC7; font-size: 0.75rem; font-size-md: 0.875rem;">Rp{{ number_format($donasi->terkumpul ?? 0, 0, ',', '.') }}</small>
+                                    <small class="fw-bold" style="color: #8DBCC7; font-size: 0.75rem; font-size-md: 0.875rem;">Rp{{ number_format($donasi->total ?? 0, 0, ',', '.') }}</small>
                                 </div>
-                                <div class="progress" style="height: 6px; height-md: 8px; background-color: #C4E1E6;">
-                                    <div class="progress-bar" role="progressbar" style="background-color: #8DBCC7; width: {{ ($donasi->terkumpul/$donasi->target)*100 }}%" aria-valuenow="{{ ($donasi->terkumpul/$donasi->target)*100 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                @php
+                                    $progress = $donasi->target > 0 ? round(($donasi->total / $donasi->target) * 100, 1) : 0;
+                                @endphp
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <small class="text-muted">Progress Donasi</small>
+                                        <small class="text-muted">{{ $progress }}%</small>
+                                    </div>
+                                    <div class="progress" style="height: 6px; background-color: #C4E1E6;">
+                                        <div class="progress-bar" 
+                                            role="progressbar" 
+                                            style="width: {{ $progress }}%; background-color: #00ADB5;" 
+                                            aria-valuenow="{{ $progress }}" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-1">
                                     <small class="text-muted" style="font-size: 0.75rem; font-size-md: 0.875rem;">Target</small>

@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
         // Akun::factory()->count(10)->create();
         // Admin::factory()->count(3)->create();
         // User::factory()->count(5)->create();
-        // Laporan::factory()->count(10)->create();
+        Laporan::factory()->count(10)->create();
         // Donasi::factory(10)->create();
         // User_donasi::factory(20)->create();
         // LaporanDonasi::factory(10)->create();

@@ -56,12 +56,18 @@
 
                         {{-- Action Buttons --}}
                         <div class="d-flex flex-wrap gap-3 pt-3">
-                            <a href="{{ url()->previous() }}" class="btn btn-outline-secondary px-4 rounded-pill flex-grow-1" style="border-color: #393E46; color: #393E46;">
+                            <a href="{{ session('donasi_previous_url', route('donasi.index')) }}" class="btn btn-outline-secondary px-4 rounded-pill flex-grow-1" style="border-color: #393E46; color: #393E46;">
                                 <i class="bi bi-arrow-left me-2"></i> Kembali
                             </a>
-                            <a href="{{ route('donasi.form', $donasi->id_donasi) }}" class="btn px-4 rounded-pill flex-grow-1" style="background-color: #00ADB5; color: #EEEEEE;">
-                                <i class="bi bi-heart-fill me-2"></i> Donasi Sekarang
-                            </a>
+                            @if($donasi->status === 'selesai')
+                                <button class="btn px-4 rounded-pill flex-grow-1" style="background-color: #6c757d; color: #EEEEEE;" disabled>
+                                    <i class="bi bi-check-circle-fill me-2"></i> Donasi Selesai
+                                </button>
+                            @else
+                                <a href="{{ route('donasi.form', $donasi->id_donasi) }}" class="btn px-4 rounded-pill flex-grow-1" style="background-color: #00ADB5; color: #EEEEEE;">
+                                    <i class="bi bi-heart-fill me-2"></i> Donasi Sekarang
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
