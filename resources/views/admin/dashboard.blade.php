@@ -2,7 +2,7 @@
 @php use Illuminate\Support\Str; @endphp
 
 @section('content')
-<h2 class="mb-4 fw-bold text-primary">
+<h2 class="mt-5 mb-4 fw-bold text-primary">
     <i class="bi bi-bar-chart-line-fill me-2"></i>Dashboard Admin
 </h2>
 

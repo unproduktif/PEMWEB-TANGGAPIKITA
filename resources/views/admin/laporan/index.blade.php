@@ -1,7 +1,7 @@
 @extends('components.admin-layout')
 
 @section('content')
-<h2 class="mb-4">Kelola Laporan</h2>
+<h2 class="mt-5 mb-4">Kelola Laporan</h2>
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
