@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 // buat data factory
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Laporan_donasi extends Model
+class LaporanDonasi extends Model
 {
     use HasFactory; //data factory
     protected $primaryKey = 'id_laporandonasi';
@@ -29,6 +29,6 @@ class Laporan_donasi extends Model
 
     public function alokasiDana()
     {
-        return $this->hasMany(Alokasi_dana::class, 'id_laporandonasi', 'id_laporandonasi');
+        return $this->hasMany(AlokasiDana::class, 'id_laporandonasi', 'id_laporandonasi');
     }
 }

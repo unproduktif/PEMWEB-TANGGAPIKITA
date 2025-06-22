@@ -38,19 +38,25 @@
             <div class="row g-0">
                 @if($item->media)
                 <div class="col-md-4 position-relative">
-                    <img src="{{ asset('storage/' . $item->media) }}" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 200px;" alt="Gambar Laporan">
-                    <div class="position-absolute top-3 start-3">
-                        <span class="badge rounded-pill px-3 py-2 shadow-sm 
-                            @if($item->status === 'verifikasi') 
-                                bg-success bg-opacity-10 text-success
-                            @else 
-                                bg-warning bg-opacity-10 text-dark
-                            @endif">
-                            <i class="bi bi-shield-check me-1"></i>
-                            {{ ucfirst($item->status) }}
-                        </span>
-                    </div>
-                </div>
+                            @if ($item->media)
+                                <img src="{{ asset('storage/' . $item->media) }}" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 220px;" alt="Foto Laporan">
+                            @else
+                                <div class="h-100 w-100 d-flex align-items-center justify-content-center" style="background-color: #C4E1E6; min-height: 220px;">
+                                    <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+                                </div>
+                            @endif
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge rounded-pill px-3 py-2 shadow-sm 
+                                    @if($item->status == 'verifikasi') 
+                                        bg-success bg-opacity-10 text-success
+                                    @else 
+                                        bg-secondary bg-opacity-10 text-secondary 
+                                    @endif">
+                                    <i class="bi bi-shield-check me-1"></i>
+                                    {{ ucfirst($item->status) }}
+                                </span>
+                            </div>
+                        </div>
                 @endif
                 <div class="col-md-8">
                     <div class="card-body p-4 h-100 d-flex flex-column">

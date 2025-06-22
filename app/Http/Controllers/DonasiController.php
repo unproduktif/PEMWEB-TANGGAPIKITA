@@ -18,15 +18,50 @@ class DonasiController extends Controller
 {
     public function index(Request $request)
     {
-        $keyword = $request->input('search');
+        $query = Donasi::with(['laporan.user.akun']);
 
-        $query = Donasi::with('laporan'); // Eager load laporan
-
-        // Pencarian judul
-        if ($keyword) {
-            $query->where('judul', 'like', "%{$keyword}%");
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                ->orWhereHas('laporan', function ($laporanQuery) use ($search) {
+                    $laporanQuery->where('keterangan', 'like', "%{$search}%")
+                                ->orWhere('lokasi', 'like', "%{$search}%")
+                                ->orWhereHas('user.akun', function ($akunQuery) use ($search) {
+                                    $akunQuery->where('nama', 'like', "%{$search}%");
+                                });
+                });
+            });
         }
 
+        if ($request->filled('filter_waktu')) {
+            $now = now();
+            switch ($request->filter_waktu) {
+                case 'hari':
+                    $query->whereDate('tgl_mulai', $now->toDateString());
+                    break;
+                case 'minggu':
+                    $query->whereBetween('tgl_mulai', [$now->startOfWeek(), $now->endOfWeek()]);
+                    break;
+                case 'bulan':
+                    $query->whereMonth('tgl_mulai', $now->month)
+                        ->whereYear('tgl_mulai', $now->year);
+                    break;
+                case 'tanggal':
+                    if ($request->filled('tanggal')) {
+                        $query->whereDate('tgl_mulai', $request->tanggal);
+                    }
+                    break;
+            }
+        }
+
+        if ($request->filled('filter_keterangan')) {
+            $keterangan = $request->filter_keterangan;
+            $query->whereHas('laporan', function ($q) use ($keterangan) {
+                $q->where('keterangan', $keterangan);
+            });
+        }
+        session()->forget('donasi_previous_url');
         $donasi = $query->latest()->get();
 
         return view('pages.donasi.index', compact('donasi'));
@@ -34,6 +69,9 @@ class DonasiController extends Controller
 
     public function show($id_donasi)
     {
+        if (!session()->has('donasi_previous_url')) {
+            session(['donasi_previous_url' => url()->previous()]);
+        }
         $donasi = Donasi::with('laporan')->where('id_donasi', $id_donasi)->firstOrFail();
         return view('pages.donasi.detailDonasi', compact('donasi'));
     }
@@ -63,12 +101,12 @@ class DonasiController extends Controller
         $user_donasi->metode = $request->metode;
         $user_donasi->pesan = $request->pesaan;
 
-        if ($request->hasFile('bukti')) {
-            $file = $request->file('bukti');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/bukti'), $filename);
-            $user_donasi->bukti_pembayaran = 'uploads/bukti/' . $filename;
-        }
+        // if ($request->hasFile('bukti')) {
+        //     $file = $request->file('bukti');
+        //     $filename = time() . '_' . $file->getClientOriginalName();
+        //     $file->move(public_path('uploads/bukti'), $filename);
+        //     $user_donasi->bukti_pembayaran = 'uploads/bukti/' . $filename;
+        // }
 
         $user_donasi->save();
         Donasi::where('id_donasi', $request->id_donasi)->increment('total', $request->jumlah);

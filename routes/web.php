@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 });
 
-Route::middleware('admin')->group(function () {
+Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
@@ -69,12 +69,12 @@ Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('la
 Route::middleware('auth')->group(function () {
     Route::get('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
-    Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
     Route::get('/laporan/{id_laporan}/edit',[LaporanController::class, 'edit'])->name('laporan.edit');
     Route::patch('/laporan/{id_laporan}', [LaporanController::class, 'update'])->name('laporan.update');
     Route::delete('/laporan/{id_laporan}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
-
+    
 });
+Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
 
 Route::middleware('auth')->group(function(){
     Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
@@ -148,4 +148,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::patch('/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
     Route::patch('/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
 });
+
+
+Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
+Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 

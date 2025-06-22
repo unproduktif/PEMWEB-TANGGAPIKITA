@@ -60,7 +60,6 @@
                         <option value="Gempa" {{ old('keterangan') == 'Gempa' ? 'selected' : '' }}>Gempa Bumi</option>
                         <option value="Kebakaran" {{ old('keterangan') == 'Kebakaran' ? 'selected' : '' }}>Kebakaran</option>
                         <option value="Tanah Longsor" {{ old('keterangan') == 'Tanah Longsor' ? 'selected' : '' }}>Tanah Longsor</option>
-                        <option value="Angin Topan" {{ old('keterangan') == 'Angin Topan' ? 'selected' : '' }}>Angin Topan</option>
                         <option value="Lainnya" {{ old('keterangan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                     </select>
                 </div>

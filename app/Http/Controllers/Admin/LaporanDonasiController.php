@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Donasi;
-use App\Models\Laporan_donasi;
-use App\Models\Alokasi_dana;
+use App\Models\LaporanDonasi;
+use App\Models\AlokasiDana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;

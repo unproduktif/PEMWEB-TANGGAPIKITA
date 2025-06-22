@@ -38,6 +38,9 @@
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" name="password" id="password" class="form-control rounded-pill shadow-sm" required placeholder="Masukkan password">
+                    <div class="text-end mt-1">
+                        <a href="{{ route('password.request') }}" class="text-decoration-none text-primary small">Lupa Password?</a>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm" style="background-color: #1e90ff; color: white;">Login</button>

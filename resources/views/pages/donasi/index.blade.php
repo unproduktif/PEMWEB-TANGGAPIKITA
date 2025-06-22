@@ -34,17 +34,21 @@
             {{-- Filter Dropdown --}}
             <div class="col-md-4">
                 <div class="dropdown">
-                    <button class="btn w-100 d-flex justify-content-between align-items-center px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: white; border: 1px solid #dee2e6; color: #2c3e50;">
+                    <button class="btn w-100 d-flex justify-content-between align-items-center px-3 py-2" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false"
+                        style="background-color: white; border: 1px solid #dee2e6; color: #2c3e50;">
                         <span>
                             <i class="bi bi-funnel-fill me-2" style="color: #8DBCC7;"></i>
-                            Filter Donasi
+                            Filter Laporan
                         </span>
                         <i class="bi bi-chevron-down"></i>
                     </button>
                     <div class="dropdown-menu p-3 w-100 mt-2 border-0 shadow-lg" style="border-radius: 12px;">
+                        {{-- Filter Waktu --}}
                         <div class="mb-3">
-                            <label for="filter_waktu" class="form-label small fw-bold" style="color: #2c3e50;">Waktu Kampanye</label>
-                            <select name="filter_waktu" id="filter_waktu" class="form-select border-1" style="border-color: #C4E1E6;" onchange="toggleTanggalInput()">
+                            <label for="filter_waktu" class="form-label small fw-bold" style="color: #2c3e50;">Waktu Kejadian</label>
+                            <select name="filter_waktu" id="filter_waktu" class="form-select border-1"
+                                style="border-color: #C4E1E6;" onchange="toggleTanggalInput()">
                                 <option value="">Semua Waktu</option>
                                 <option value="hari" {{ request('filter_waktu') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
                                 <option value="minggu" {{ request('filter_waktu') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
@@ -52,18 +56,49 @@
                                 <option value="tanggal" {{ request('filter_waktu') == 'tanggal' ? 'selected' : '' }}>Pilih Tanggal</option>
                             </select>
                         </div>
+
+                        {{-- Filter Tanggal --}}
                         <div class="mb-3" id="tanggal-wrapper" style="display: none;">
                             <label for="tanggal" class="form-label small fw-bold" style="color: #2c3e50;">Tanggal Spesifik</label>
-                            <input type="date" name="tanggal" id="tanggal" class="form-control border-1" style="border-color: #C4E1E6;" value="{{ request('tanggal') }}">
+                            <input type="date" name="tanggal" id="tanggal" class="form-control border-1"
+                                style="border-color: #C4E1E6;" value="{{ request('tanggal') }}">
                         </div>
+
+                        {{-- Filter Jenis Bencana --}}
+                        <div class="mb-3">
+                            <label for="filter_keterangan" class="form-label small fw-bold" style="color: #2c3e50;">Jenis Bencana</label>
+                            <select name="filter_keterangan" id="filter_keterangan" class="form-select border-1"
+                                style="border-color: #C4E1E6;">
+                                <option value="">Semua Jenis</option>
+                                <option value="Banjir" {{ request('filter_keterangan') == 'Banjir' ? 'selected' : '' }}>Banjir</option>
+                                <option value="Gempa" {{ request('filter_keterangan') == 'Gempa' ? 'selected' : '' }}>Gempa</option>
+                                <option value="Kebakaran" {{ request('filter_keterangan') == 'Kebakaran' ? 'selected' : '' }}>Kebakaran</option>
+                                <option value="Tanah Longsor" {{ request('filter_keterangan') == 'Tanah Longsor' ? 'selected' : '' }}>Tanah Longsor</option>
+                                <option value="Lainnya" {{ request('filter_keterangan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            </select>
+                        </div>
+
+                        {{-- Tombol --}}
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-sm flex-grow-1" style="background-color: #8DBCC7; color: white;">Terapkan</button>
+                            <button type="submit" class="btn btn-sm flex-grow-1" style="background-color: #8DBCC7; color: white;">
+                                Terapkan
+                            </button>
                             <a href="{{ route('donasi.index') }}" class="btn btn-sm btn-outline-secondary flex-grow-1">Reset</a>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+
+        <script>
+            function toggleTanggalInput() {
+                const filter = document.getElementById('filter_waktu').value;
+                const tanggalWrapper = document.getElementById('tanggal-wrapper');
+                tanggalWrapper.style.display = (filter === 'tanggal') ? 'block' : 'none';
+            }
+
+            document.addEventListener("DOMContentLoaded", toggleTanggalInput);
+        </script>
     </div>
 
     {{-- Donation Campaigns --}}
@@ -108,7 +143,7 @@
                                     </div>
                                     <div class="progress" style="height: 10px; background-color: #EBFFD8;">
                                         <div class="progress-bar progress-bar-animated" role="progressbar" 
-                                             style="background-color: #8DBCC7; width: {{ $persentase }}%;" 
+                                             style="background-color: #00ADB5; width: {{ $persentase }}%;" 
                                              aria-valuenow="{{ $persentase }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                     <div class="text-end mt-1">
@@ -120,13 +155,21 @@
                             {{-- Action Buttons --}}
                             <div class="d-flex flex-wrap gap-2">
                                 <a href="{{ route('donasi.show', $item->id_donasi) }}" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center flex-grow-1" 
-                                   style="background-color: #A4CCD9; color: #2c3e50; border-radius: 8px;">
+                                style="background-color: #A4CCD9; color: #2c3e50; border-radius: 8px;">
                                     <i class="bi bi-eye-fill me-1"></i> Detail Kampanye
                                 </a>
-                                <a href="{{ route('donasi.form', $item->id_donasi) }}" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center flex-grow-1" 
-                                   style="background-color: #e74c3c; color: white; border-radius: 8px;">
-                                    <i class="bi bi-heart-fill me-1"></i> Donasi Sekarang
-                                </a>
+
+                                @if($item->status === 'selesai')
+                                    <button class="btn btn-sm px-3 py-2 flex-grow-1 d-flex align-items-center justify-content-center" 
+                                            style="background-color: #6c757d; color: white; border-radius: 8px;" disabled>
+                                        <i class="bi bi-check-circle-fill me-1"></i> Donasi Selesai
+                                    </button>
+                                @else
+                                    <a href="{{ route('donasi.form', $item->id_donasi) }}" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center flex-grow-1" 
+                                    style="background-color: #00ADB5; color: white; border-radius: 8px;">
+                                        <i class="bi bi-heart-fill me-1"></i> Donasi Sekarang
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>

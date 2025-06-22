@@ -87,7 +87,7 @@
                 <div class="mb-4">
                     <h5 class="fw-semibold mb-3" style="color: #2c3e50;">
                         <i class="bi bi-info-circle me-2" style="color: #8DBCC7;"></i>
-                        Keterangan Tambahan
+                        Jenis Bencana
                     </h5>
                     <div class="ps-4">
                         <p class="text-muted mb-0" style="line-height: 1.7; text-align: justify;">
@@ -101,7 +101,7 @@
 
                 {{-- Action Buttons --}}
                 <div class="d-flex flex-wrap gap-3 mt-4">
-                    <a href="{{ url()->previous() }}" class="btn btn-hover px-4 py-2 d-flex align-items-center" style="background-color: #A4CCD9; color: #2c3e50; border-radius: 8px;">
+                    <a href="{{ session('laporan_prev_url', route('home')) }}" class="btn btn-hover px-4 py-2 d-flex align-items-center" style="background-color: #A4CCD9; color: #2c3e50; border-radius: 8px;">
                         <i class="bi bi-arrow-left me-2"></i> Kembali
                     </a>
 

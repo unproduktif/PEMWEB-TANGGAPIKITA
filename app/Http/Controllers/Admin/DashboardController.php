@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Laporan;
-use App\Models\Laporan_donasi;
+use App\Models\LaporanDonasi;
 use App\Models\Edukasi;
 use App\Models\Donasi;
 use App\Models\User;

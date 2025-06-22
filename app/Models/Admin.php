@@ -29,6 +29,6 @@ class Admin extends Model
 
     public function laporanDonasi()
     {
-        return $this->hasMany(Laporan_donasi::class, 'id_admin', 'id_admin');
+        return $this->hasMany(LaporanDonasi::class, 'id_admin', 'id_admin');
     }
 }

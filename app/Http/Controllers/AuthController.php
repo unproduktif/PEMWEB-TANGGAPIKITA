@@ -8,6 +8,8 @@ use App\Models\Akun;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class AuthController extends Controller
 {
@@ -90,5 +92,29 @@ class AuthController extends Controller
         $request->session()->regenerateToken(); // Amankan CSRF token baru
 
         return redirect()->route('home')->with('success', 'Logout berhasil!'); // Redirect ke halaman home
+    }
+
+    public function formLupaPassword()
+    {
+        return view('auth.lupa-password');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $akun = Akun::where('email', $request->email)->first();
+
+        if (!$akun) {
+            return back()->with('error', 'Email tidak ditemukan.');
+        }
+
+        $akun->password = Hash::make($request->password);
+        $akun->save();
+
+        return back()->with('success', 'Password berhasil direset. Silakan login kembali.');
     }
 }

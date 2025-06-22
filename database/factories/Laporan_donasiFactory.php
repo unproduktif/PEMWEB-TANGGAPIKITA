@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Laporan_donasi;
+use App\Models\LaporanDonasi;
 use App\Models\Donasi;
 use App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class Laporan_donasiFactory extends Factory
 {
-    protected $model = Laporan_donasi::class;
+    protected $model = LaporanDonasi::class;
 
     public function definition()
     {

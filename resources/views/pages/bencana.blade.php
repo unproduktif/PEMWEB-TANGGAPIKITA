@@ -5,7 +5,7 @@
 
     {{-- Search and Filter Section --}}
     <div class="search-filter-container mb-4 p-4 rounded-4" style="background-color: #EBFFD8;">
-        <form method="GET" action="{{ route('laporan.index') }}" class="row g-3 align-items-end">
+        <form method="GET" action="{{ route('bencana') }}" class="row g-3 align-items-end">
             {{-- Search Input --}}
             <div class="col-md-8">
                 <div class="input-group">
@@ -20,7 +20,9 @@
             {{-- Filter Dropdown --}}
             <div class="col-md-4">
                 <div class="dropdown">
-                    <button class="btn w-100 d-flex justify-content-between align-items-center px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: white; border: 1px solid #dee2e6; color: #2c3e50;">
+                    <button class="btn w-100 d-flex justify-content-between align-items-center px-3 py-2" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false"
+                        style="background-color: white; border: 1px solid #dee2e6; color: #2c3e50;">
                         <span>
                             <i class="bi bi-funnel-fill me-2" style="color: #8DBCC7;"></i>
                             Filter Laporan
@@ -28,9 +30,11 @@
                         <i class="bi bi-chevron-down"></i>
                     </button>
                     <div class="dropdown-menu p-3 w-100 mt-2 border-0 shadow-lg" style="border-radius: 12px;">
+                        {{-- Filter Waktu --}}
                         <div class="mb-3">
                             <label for="filter_waktu" class="form-label small fw-bold" style="color: #2c3e50;">Waktu Kejadian</label>
-                            <select name="filter_waktu" id="filter_waktu" class="form-select border-1" style="border-color: #C4E1E6;" onchange="toggleTanggalInput()">
+                            <select name="filter_waktu" id="filter_waktu" class="form-select border-1"
+                                style="border-color: #C4E1E6;" onchange="toggleTanggalInput()">
                                 <option value="">Semua Waktu</option>
                                 <option value="hari" {{ request('filter_waktu') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
                                 <option value="minggu" {{ request('filter_waktu') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
@@ -38,18 +42,49 @@
                                 <option value="tanggal" {{ request('filter_waktu') == 'tanggal' ? 'selected' : '' }}>Pilih Tanggal</option>
                             </select>
                         </div>
+
+                        {{-- Filter Tanggal --}}
                         <div class="mb-3" id="tanggal-wrapper" style="display: none;">
                             <label for="tanggal" class="form-label small fw-bold" style="color: #2c3e50;">Tanggal Spesifik</label>
-                            <input type="date" name="tanggal" id="tanggal" class="form-control border-1" style="border-color: #C4E1E6;" value="{{ request('tanggal') }}">
+                            <input type="date" name="tanggal" id="tanggal" class="form-control border-1"
+                                style="border-color: #C4E1E6;" value="{{ request('tanggal') }}">
                         </div>
+
+                        {{-- Filter Jenis Bencana --}}
+                        <div class="mb-3">
+                            <label for="filter_keterangan" class="form-label small fw-bold" style="color: #2c3e50;">Jenis Bencana</label>
+                            <select name="filter_keterangan" id="filter_keterangan" class="form-select border-1"
+                                style="border-color: #C4E1E6;">
+                                <option value="">Semua Jenis</option>
+                                <option value="Banjir" {{ request('filter_keterangan') == 'Banjir' ? 'selected' : '' }}>Banjir</option>
+                                <option value="Gempa" {{ request('filter_keterangan') == 'Gempa' ? 'selected' : '' }}>Gempa</option>
+                                <option value="Kebakaran" {{ request('filter_keterangan') == 'Kebakaran' ? 'selected' : '' }}>Kebakaran</option>
+                                <option value="Tanah Longsor" {{ request('filter_keterangan') == 'Tanah Longsor' ? 'selected' : '' }}>Tanah Longsor</option>
+                                <option value="Lainnya" {{ request('filter_keterangan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            </select>
+                        </div>
+
+                        {{-- Tombol --}}
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-sm flex-grow-1" style="background-color: #8DBCC7; color: white;">Terapkan</button>
+                            <button type="submit" class="btn btn-sm flex-grow-1" style="background-color: #8DBCC7; color: white;">
+                                Terapkan
+                            </button>
                             <a href="{{ route('laporan.index') }}" class="btn btn-sm btn-outline-secondary flex-grow-1">Reset</a>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+
+        <script>
+            function toggleTanggalInput() {
+                const filter = document.getElementById('filter_waktu').value;
+                const tanggalWrapper = document.getElementById('tanggal-wrapper');
+                tanggalWrapper.style.display = (filter === 'tanggal') ? 'block' : 'none';
+            }
+
+            document.addEventListener("DOMContentLoaded", toggleTanggalInput);
+        </script>
     </div>
 
     {{-- Laporan List --}}
@@ -145,7 +180,7 @@
                     <i class="bi bi-exclamation-circle-fill mb-3" style="font-size: 2.5rem; color: #8DBCC7;"></i>
                     <h5 class="fw-bold mb-2" style="color: #2c3e50;">Tidak Ada Laporan Ditemukan</h5>
                     <p class="text-muted mb-4">Tidak ada laporan yang sesuai dengan kriteria pencarian Anda</p>
-                    <a href="{{ route('laporan.index') }}" class="btn px-4" style="background-color: #8DBCC7; color: white;">Reset Pencarian</a>
+                    <a href="{{ route('bencana') }}" class="btn px-4" style="background-color: #8DBCC7; color: white;">Reset Pencarian</a>
                 </div>
             </div>
         @endforelse

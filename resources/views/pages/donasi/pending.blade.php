@@ -1,6 +1,13 @@
 @extends('components.layout')
 
 @section('content')
+
+@if(isset($status) && $status !== 'pending')
+    @php
+        return redirect()->route('donasi.sukses');
+    @endphp
+@endif
+
 <div class="container py-4 py-md-5">
 
     {{-- Status Section --}}
@@ -82,11 +89,8 @@
 
     {{-- Action Buttons --}}
     <div class="text-center mt-5">
-        <a href="{{ route('dashboard') }}" class="btn px-4 py-2 me-2" style="background-color: #393E46; color: white;">
+        <a href="{{ route('home') }}" class="btn px-4 py-2 me-2" style="background-color: #393E46; color: white;">
             <i class="bi bi-house-door me-2"></i> Kembali ke Beranda
-        </a>
-        <a href="{{ route('contact') }}" class="btn px-4 py-2" style="background-color: #00ADB5; color: white;">
-            <i class="bi bi-headset me-2"></i> Hubungi Dukungan
         </a>
     </div>
 </div>
