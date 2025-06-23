@@ -57,8 +57,8 @@ class LaporanDonasiController extends Controller
         }
 
         $donasis = $query->orderBy('tgl_selesai', 'desc')
-                         ->paginate(10)
-                         ->withQueryString();
+                        ->paginate(10)
+                        ->withQueryString();
 
         return view('admin.laporandonasi.index', compact('donasis'));
     }
@@ -68,11 +68,11 @@ class LaporanDonasiController extends Controller
         $donasi = Donasi::findOrFail($id_donasi);
         if ($donasi->status !== 'selesai') {
             return redirect()->route('admin.laporandonasi.index')
-                           ->with('error', 'Hanya bisa membuat laporan untuk donasi yang sudah selesai');
+                        ->with('error', 'Hanya bisa membuat laporan untuk donasi yang sudah selesai');
         }
         if ($donasi->laporanDonasi) {
             return redirect()->route('admin.laporandonasi.index')
-                           ->with('error', 'Laporan untuk donasi ini sudah ada');
+                        ->with('error', 'Laporan untuk donasi ini sudah ada');
         }
 
         return view('admin.laporandonasi.create', compact('donasi'));
@@ -122,7 +122,7 @@ class LaporanDonasiController extends Controller
             }
 
             return redirect()->route('admin.laporandonasi.index')
-                           ->with('success', 'Laporan donasi berhasil disimpan.');
+                        ->with('success', 'Laporan donasi berhasil disimpan.');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menyimpan laporan: ' . $e->getMessage());
         }

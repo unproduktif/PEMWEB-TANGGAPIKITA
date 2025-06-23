@@ -153,6 +153,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
 Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 
+Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
+Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 
 Route::prefix('admin/akun')->name('admin.akun.')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/', [AdminUserController::class, 'index'])->name('index');
