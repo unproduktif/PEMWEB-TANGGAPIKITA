@@ -9,9 +9,6 @@
 
         <div class="collapse show" id="formPerbarui">
             <div class="border rounded-4 p-4 mb-4 bg-light">
-                <h5 class="text-primary fw-bold mb-3">
-                    <i class="bi bi-pencil-square me-2"></i> Form Perbarui Data
-                </h5>
                 <form action="{{ route('admin.akun.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AkunController;
 use App\Http\Controllers\Admin\InformasiController;
 use App\Http\Controllers\Admin\LaporanDonasiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Admin\EdukasiController;
 use App\Http\Controllers\HomeController;
@@ -133,14 +134,14 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
     Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
     Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
-    Route::resource('akun', AkunController::class)->except(['show'])->names([
-        'index' => 'admin.akun.index',
-        'create' => 'admin.akun.create',
-        'store' => 'admin.akun.store',
-        'edit' => 'admin.akun.edit',
-        'update' => 'admin.akun.update',
-        'destroy' => 'admin.akun.destroy'
-    ]);
+    // Route::resource('akun', AkunController::class)->except(['show'])->names([
+    //     'index' => 'admin.akun.index',
+    //     'create' => 'admin.akun.create',
+    //     'store' => 'admin.akun.store',
+    //     'edit' => 'admin.akun.edit',
+    //     'update' => 'admin.akun.update',
+    //     'destroy' => 'admin.akun.destroy'
+    // ]);
     
     // Keep your existing profile routes
     Route::get('/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
@@ -149,7 +150,13 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::patch('/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
 });
 
-
 Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
 Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 
+
+Route::prefix('admin/akun')->name('admin.akun.')->middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/', [AdminUserController::class, 'index'])->name('index');
+    Route::get('/{id}/edit', [AdminUserController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [AdminUserController::class, 'update'])->name('update');
+    Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('destroy');
+});

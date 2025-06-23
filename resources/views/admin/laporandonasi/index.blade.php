@@ -105,7 +105,7 @@
                                     </td>
                                     <td>
                                         <span class="badge rounded-pill py-2 px-3" style="background-color: #C4E1E6; color: #2c3e50;">
-                                            Selesai
+                                            {{$donasi->status}}
                                         </span>
                                     </td>
                                     <td>
