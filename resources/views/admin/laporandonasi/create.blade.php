@@ -2,19 +2,6 @@
 
 @section('content')
 <div class="container py-4 py-md-5">
-    {{-- Header Section --}}
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-            <h1 class="fw-bold display-5 mb-2" style="color: #2c3e50;">
-                <span class="text-gradient" style="background: linear-gradient(to right, #8DBCC7, #00ADB5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Buat Laporan Donasi</span>
-            </h1>
-            <p class="text-muted mb-0">
-                <i class="bi bi-clipboard2-check-fill me-1" style="color: #8DBCC7;"></i>
-                Buat laporan pertanggungjawaban untuk donasi yang telah selesai
-            </p>
-        </div>
-        <div class="d-none d-md-block" style="width: 80px; height: 4px; background: linear-gradient(to right, #8DBCC7, #00ADB5); border-radius: 2px;"></div>
-    </div>
 
     {{-- Form Card --}}
     <div class="card border-0 shadow-lg rounded-4 overflow-hidden transition-all">
@@ -48,27 +35,33 @@
                 {{-- Financial Summary --}}
                 <div class="row g-3 mb-4">
                     <div class="col-md-4">
-                        <label for="total" class="form-label fw-semibold text-muted mb-2">Total Dana Terkumpul</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-0" style="color: #8DBCC7;">Rp</span>
-                            <input type="number" name="total" id="total" class="form-control border-0 bg-light" 
-                                   value="{{ old('total', $donasi->total) }}" required style="border-radius: 12px;">
+                        <label class="form-label fw-semibold text-muted mb-2">Total Dana Terkumpul</label>
+                        <div class="form-control bg-light py-3" style="color: #2c3e50; border-radius: 12px;">
+                            Rp {{ number_format($donasi->total, 0, ',', '.') }}
                         </div>
+                        <input type="hidden" id="total-dana" name="total" value="{{ $donasi->total }}">
                     </div>
+
                     <div class="col-md-4">
-                        <label for="sisa" class="form-label fw-semibold text-muted mb-2">Sisa Dana</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-0" style="color: #8DBCC7;">Rp</span>
-                            <input type="number" name="sisa" id="sisa" class="form-control border-0 bg-light" 
-                                   value="{{ old('sisa', 0) }}" required style="border-radius: 12px;">
+                        <label class="form-label fw-semibold text-muted mb-2">Sisa Dana</label>
+                        <div class="form-control bg-light py-3" id="sisa-dana-display"
+                            style="color: #2c3e50; border-radius: 12px;">
+                            Rp {{ number_format($donasi->total, 0, ',', '.') }}
                         </div>
+                        <input type="hidden" id="sisa-dana" name="sisa" value="{{ $donasi->total }}">
+                            <div class="text-danger small mt-1" id="alokasi-warning" style="display:none;">
+                                Total alokasi melebihi total dana yang tersedia!
+                            </div>
+
                     </div>
+
                     <div class="col-md-4">
                         <label for="tanggal" class="form-label fw-semibold text-muted mb-2">Tanggal Laporan</label>
                         <input type="date" name="tanggal" id="tanggal" class="form-control border-0 bg-light" 
-                               value="{{ old('tanggal', now()->format('Y-m-d')) }}" required style="border-radius: 12px;">
+                            value="{{ old('tanggal', now()->format('Y-m-d')) }}" required style="border-radius: 12px;">
                     </div>
                 </div>
+
 
                 <hr class="my-4" style="border-color: rgba(140, 188, 199, 0.3);">
 
@@ -122,6 +115,7 @@
                         <i class="bi bi-save-fill me-1"></i> Simpan Laporan
                     </button>
                 </div>
+
             </form>
         </div>
     </div>
@@ -156,6 +150,30 @@
 @section('scripts')
 <script>
     let index = 1;
+
+    function updateSisaDana() {
+        const totalDana = parseFloat(document.getElementById('total-dana').value);
+        let totalAlokasi = 0;
+
+        document.querySelectorAll('input[name^="alokasi"][name$="[jumlah]"]').forEach(input => {
+            const value = parseFloat(input.value) || 0;
+            totalAlokasi += value;
+        });
+
+        const sisaDana = totalDana - totalAlokasi;
+        document.getElementById('sisa-dana').value = sisaDana >= 0 ? sisaDana : 0;
+
+        document.getElementById('sisa-dana-display').innerText = `Rp ${sisaDana.toLocaleString('id-ID')}`;
+
+        const warning = document.getElementById('alokasi-warning');
+        if (sisaDana < 0) {
+            warning.style.display = 'block';
+        } else {
+            warning.style.display = 'none';
+        }
+    }
+
+
     document.getElementById('add-alokasi').addEventListener('click', function () {
         const container = document.getElementById('alokasi-container');
         const html = `
@@ -171,8 +189,8 @@
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-0" style="color: #8DBCC7;">Rp</span>
-                        <input type="number" name="alokasi[${index}][jumlah]" class="form-control border-0 bg-light" 
-                               placeholder="Jumlah" required style="border-radius: 12px;">
+                        <input type="number" name="alokasi[${index}][jumlah]" class="form-control border-0 bg-light alokasi-jumlah" 
+                               placeholder="Jumlah" required style="border-radius: 12px;" min="0" oninput="updateSisaDana()">
                     </div>
                 </div>
                 <div class="col-md-3 d-flex align-items-center">
@@ -188,7 +206,32 @@
     document.addEventListener('click', function (e) {
         if (e.target.closest('.remove-alokasi')) {
             e.target.closest('.alokasi-item').remove();
+            updateSisaDana();
         }
     });
+
+    document.addEventListener('input', function (e) {
+        if (e.target.matches('input[name^="alokasi"][name$="[jumlah]"]')) {
+            updateSisaDana();
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const sisaDana = parseFloat(document.getElementById('sisa-dana').value);
+
+        if (sisaDana < 0) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Menyimpan!',
+                text: 'Total alokasi melebihi total dana yang tersedia.',
+                confirmButtonColor: '#8DBCC7'
+            });
+        }
+    });
+
+
+
+    updateSisaDana();
 </script>
 @endsection

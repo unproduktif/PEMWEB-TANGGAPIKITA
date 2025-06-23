@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="dashboard-header mb-4">
-    <p class="text-muted">Welcome back, {{ auth()->user()->nama }}. Here's what's happening with your platform.</p>
+    <p class="text-muted">Selamat datang, {{ auth()->user()->nama }}. Berikut perkembangan terkini.</p>
 </div>
 
 <!-- Summary Cards -->
@@ -14,7 +14,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="card-subtitle mb-2">Total Reports</h6>
+                        <h6 class="card-subtitle mb-2">Total Laporan</h6>
                         <h3 class="fw-bold mb-0">{{ $totalLaporan }}</h3>
                     </div>
                     <div class="icon-wrapper bg-white-25">
@@ -24,7 +24,7 @@
                 <div class="mt-3">
                     <small class="d-flex align-items-center">
                         <span class="badge bg-white text-info me-2">Total</span>
-                        All time reports collected
+                        Total laporan yang telah dikumpulkan
                     </small>
                 </div>
             </div>
@@ -37,7 +37,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="card-subtitle mb-2">Verified</h6>
+                        <h6 class="card-subtitle mb-2">Terverifikasi</h6>
                         <h3 class="fw-bold mb-0">{{ $laporanTerverifikasi }}</h3>
                     </div>
                     <div class="icon-wrapper bg-white-25">
@@ -47,7 +47,7 @@
                 <div class="mt-3">
                     <small class="d-flex align-items-center">
                         <span class="badge bg-white text-success me-2">{{ $presentaseVerifikasi }}%</span>
-                        of total reports verified
+                        laporan sudah diverifikasi
                     </small>
                 </div>
             </div>
@@ -60,7 +60,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="card-subtitle mb-2">Pending Verification</h6>
+                        <h6 class="card-subtitle mb-2">Menunggu Verifikasi</h6>
                         <h3 class="fw-bold mb-0">{{ $laporanBelum }}</h3>
                     </div>
                     <div class="icon-wrapper bg-white-25">
@@ -69,8 +69,8 @@
                 </div>
                 <div class="mt-3">
                     <small class="d-flex align-items-center">
-                        <span class="badge bg-white text-warning me-2">Action Needed</span>
-                        awaiting your review
+                        <span class="badge bg-white text-warning me-2">Butuh Tindakan</span>
+                        Menunggu peninjauan
                     </small>
                 </div>
             </div>
@@ -83,8 +83,8 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="card-subtitle mb-2">Total Users</h6>
-                        <h3 class="fw-bold mb-0">{{ $totalUser }}</h3>
+                        <h6 class="card-subtitle mb-2">Total Pengguna</h6>
+                        <h3 class="fw-bold mb-0">{{ $totalUser + $totalAdmin }}</h3>
                     </div>
                     <div class="icon-wrapper bg-white-25">
                         <i class="bi bi-people-fill"></i>
@@ -93,7 +93,7 @@
                 <div class="mt-3">
                     <small class="d-flex align-items-center">
                         <span class="badge bg-white text-dark me-2">{{ $totalAdmin }} Admins</span>
-                        platform users
+                        Pengguna platform
                     </small>
                 </div>
             </div>
@@ -107,9 +107,9 @@
         <div class="card border-0 shadow-sm rounded-3 h-100">
             <div class="card-header bg-white border-0 pb-0">
                 <h5 class="card-title text-info mb-0">
-                    <i class="bi bi-pin-map-fill me-2"></i>Recent Reports & Donations
+                    <i class="bi bi-pin-map-fill me-2"></i>Laporan & Donasi Terbaru
                 </h5>
-                <p class="text-muted small mb-3">Latest reports with donation progress</p>
+                <p class="text-muted small mb-3">Laporan terbaru dengan progres donasi</p>
             </div>
             <div class="card-body pt-2">
                 @forelse ($donasiPerLaporan as $item)
@@ -124,18 +124,18 @@
                                 <h6 class="mb-1 fw-bold">
                                     <a href="#" class="text-decoration-none text-dark">{{ $item->judul }}</a>
                                 </h6>
-                                <small class="text-muted">Report ID: {{ $item->id_laporan }}</small>
+                                <small class="text-muted">ID: {{ $item->id_laporan }}</small>
                             </div>
                             <div class="text-end">
                                 <span class="badge bg-success fs-6">
-                                    Rp{{ number_format($item->total_donasi, 0, ',', '.') }}
+                                    Rp {{ number_format($item->total_donasi, 0, ',', '.') }}
                                 </span>
-                                <div class="small text-muted">of Rp{{ number_format($item->target, 0, ',', '.') }}</div>
+                                <div class="small text-muted">of Rp {{ number_format($item->target, 0, ',', '.') }}</div>
                             </div>
                         </div>
                         <div class="progress-wrapper">
                             <div class="d-flex justify-content-between small mb-1">
-                                <span>Progress</span>
+                                <span>Progres</span>
                                 <span>{{ $persentase }}%</span>
                             </div>
                             <div class="progress rounded-pill" style="height: 8px;">
@@ -150,7 +150,7 @@
                 @empty
                     <div class="text-center py-4">
                         <i class="bi bi-inbox fs-1 text-muted"></i>
-                        <p class="text-muted mt-2">No donation records available</p>
+                        <p class="text-muted mt-2">Tidak ada catatan donasi tersedia</p>
                     </div>
                 @endforelse
             </div>
@@ -161,9 +161,9 @@
         <div class="card border-0 shadow-sm rounded-3 h-100">
             <div class="card-header bg-white border-0">
                 <h5 class="card-title text-primary mb-0">
-                    <i class="bi bi-graph-up-arrow me-2"></i>Monthly Reports
+                    <i class="bi bi-graph-up-arrow me-2"></i>Laporan Bulanan
                 </h5>
-                <p class="text-muted small mb-3">Report trends by month</p>
+                <p class="text-muted small mb-3">Tren laporan per bulan</p>
             </div>
             <div class="card-body pt-0" style="height: 300px;">
                 <canvas id="laporanChart"></canvas>
@@ -180,16 +180,16 @@
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <h5 class="card-title text-success mb-1">
-                            <i class="bi bi-cash-coin me-2"></i>Total Donations
+                            <i class="bi bi-cash-coin me-2"></i>Total Donasi
                         </h5>
-                        <p class="text-muted small">All time collected donations</p>
+                        <p class="text-muted small">Total donasi yang terkumpul</p>
                     </div>
-                    <h2 class="fw-bold text-success">Rp{{ number_format($totalDonasi, 0, ',', '.') }}</h2>
+                    <h2 class="fw-bold text-success">Rp {{ number_format($totalDonasi, 0, ',', '.') }}</h2>
                 </div>
                 <div class="mt-3">
                     <div class="d-flex align-items-center">
                         <i class="bi bi-info-circle-fill text-success me-2"></i>
-                        <small class="text-muted">Includes all verified donations</small>
+                        <small class="text-muted">Termasuk semua donasi yang telah diverifikasi</small>
                     </div>
                 </div>
             </div>
@@ -200,22 +200,22 @@
         <div class="card border-0 shadow-sm rounded-3">
             <div class="card-header bg-white border-0">
                 <h5 class="card-title text-info mb-0">
-                    <i class="bi bi-person-gear me-2"></i>User Roles
+                    <i class="bi bi-person-gear me-2"></i>Role Pengguna
                 </h5>
-                <p class="text-muted small mb-3">Platform user distribution</p>
+                <p class="text-muted small mb-3">Distribusi pengguna platform</p>
             </div>
             <div class="card-body pt-0">
                 <div class="row">
                     <div class="col-6">
                         <div class="metric-box text-center p-3 bg-primary bg-opacity-10 rounded-3">
                             <h3 class="fw-bold text-primary mb-1">{{ $totalAdmin }}</h3>
-                            <small class="text-muted">Administrators</small>
+                            <small class="text-muted">Admin</small>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="metric-box text-center p-3 bg-info bg-opacity-10 rounded-3">
-                            <h3 class="fw-bold text-info mb-1">{{ $totalUser - $totalAdmin }}</h3>
-                            <small class="text-muted">Regular Users</small>
+                            <h3 class="fw-bold text-info mb-1">{{ $totalUser }}</h3>
+                            <small class="text-muted">User</small>
                         </div>
                     </div>
                 </div>

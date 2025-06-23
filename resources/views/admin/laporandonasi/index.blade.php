@@ -7,7 +7,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h3 class="fw-bold mb-0" style="color: #2c3e50;">
                 <i class="bi bi-file-earmark-text me-2" style="color: #8DBCC7;"></i>
-                Daftar Campaign Donasi Selesai
+                Daftar Donasi
             </h3>
         </div>
     </div>
@@ -81,7 +81,7 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead style="background-color: #EBFFD8;">
                             <tr>
-                                <th class="ps-4" style="width: 60px;">#</th>
+                                <th class="ps-4" style="width: 60px;">No</th>
                                 <th style="min-width: 250px;">Judul Donasi</th>
                                 <th style="min-width: 150px;">Total Donasi</th>
                                 <th style="width: 120px;">Status</th>
