@@ -100,7 +100,6 @@ class LaporanDonasiController extends Controller
             return back()->withErrors([
                 'alokasi' => 'Total alokasi melebihi dana yang digunakan (Total - Sisa)'
             ])->withInput();
-
         }
 
         try {
