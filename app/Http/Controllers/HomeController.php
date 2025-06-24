@@ -9,10 +9,10 @@ use App\Models\Donasi;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index() #tes
     {
-        $edukasis = Edukasi::latest()->take(3)->get();
-        $laporans = Laporan::where('status', 'verifikasi')->latest()->take(3)->get();
+        $edukasis = Edukasi::latest()->paginate(6);
+        $laporans = Laporan::where('status', 'verifikasi')->latest()->take(3)->get(); 
         $donasis = Donasi::latest()->take(3)->get();
 
         return view('home', compact('edukasis', 'laporans', 'donasis'));
