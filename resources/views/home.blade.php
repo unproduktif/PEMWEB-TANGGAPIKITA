@@ -81,6 +81,10 @@
                 </div>
             @endforelse
         </div>
+        <!-- Pagination links -->
+        <div class="d-flex justify-content-center mt-4">
+            {{ $edukasis->links('pagination::bootstrap-5') }}
+        </div>
     </section>
 
     <!-- Section Laporan Terverifikasi -->

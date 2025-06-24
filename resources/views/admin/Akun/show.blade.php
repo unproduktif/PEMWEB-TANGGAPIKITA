@@ -143,7 +143,7 @@
                     <i class="bi bi-pencil-square me-1"></i> Edit
                 </a>
                 <form action="{{ route('admin.akun.destroy', $user->id_user) }}" method="POST" 
-                      onsubmit="return confirm('Yakin ingin menghapus akun ini?')">
+                      >
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-hover rounded-pill px-4 py-2"

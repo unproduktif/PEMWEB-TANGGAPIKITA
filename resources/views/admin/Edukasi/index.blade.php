@@ -76,7 +76,7 @@
                             <a href="{{ route('admin.edukasi.edit', $edukasi->id_edukasi) }}" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" style="background-color: #fff8e1; color: #2c3e50; border-radius: 8px;">
                                 <i class="bi bi-pencil-fill me-1"></i> Edit
                             </a>
-                            <form action="{{ route('admin.edukasi.destroy', $edukasi->id_edukasi) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus konten ini?')">
+                            <form action="{{ route('admin.edukasi.destroy', $edukasi->id_edukasi) }}" method="POST" >
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" style="background-color: #ffebee; color: #c62828; border-radius: 8px;">

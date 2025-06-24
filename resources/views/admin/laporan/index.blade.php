@@ -146,7 +146,6 @@
                                                     class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" 
                                                     style="background-color: #ffebee; color: #c62828; border-radius: 8px;"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    onclick="return confirm('Hapus laporan ini?')">
                                                 <i class="bi bi-trash-fill me-1"></i> Hapus
                                             </button>
                                         </form>

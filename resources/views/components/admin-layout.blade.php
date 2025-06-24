@@ -76,30 +76,41 @@
     <!-- JS & SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <div id="flash-message"
+        data-success="{{ session('success') }}"
+        data-error="{{ session('error') }}">
+    </div>
+
 
     <script>
-        // Toggle sidebar on mobile
-        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
-            document.querySelector('.admin-sidebar').classList.toggle('show');
-        });
-        
-        document.querySelector('.sidebar-close').addEventListener('click', function() {
-            document.querySelector('.admin-sidebar').classList.remove('show');
-        });
-        
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
+    // SIDEBAR TOGGLE SCRIPT (MOBILE SUPPORT)
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.querySelector('.sidebar-toggle');
+            const closeBtn = document.querySelector('.sidebar-close');
             const sidebar = document.querySelector('.admin-sidebar');
-            const navbarToggle = document.querySelector('.sidebar-toggle');
-            
-            if (window.innerWidth < 992 && 
-                !sidebar.contains(event.target) && 
-                !navbarToggle.contains(event.target) &&
-                event.target !== navbarToggle) {
-                sidebar.classList.remove('show');
+
+            if (toggleBtn && sidebar) {
+                toggleBtn.addEventListener('click', function () {
+                    sidebar.classList.toggle('show');
+                });
             }
+
+            if (closeBtn && sidebar) {
+                closeBtn.addEventListener('click', function () {
+                    sidebar.classList.remove('show');
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                if (window.innerWidth < 992 &&
+                    sidebar && !sidebar.contains(event.target) &&
+                    toggleBtn && !toggleBtn.contains(event.target)) {
+                    sidebar.classList.remove('show');
+                }
+            });
         });
 
+        // SWEETALERT SESSION
         @if(session('success'))
             Swal.fire({
                 icon: 'success',
@@ -111,6 +122,7 @@
                 backdrop: 'rgba(0, 0, 0, 0.1)'
             });
         @endif
+
         @if(session('error'))
             Swal.fire({
                 icon: 'error',

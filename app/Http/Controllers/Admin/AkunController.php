@@ -33,13 +33,18 @@ class AkunController extends Controller
     public function updateFoto(Request $request)
     {
         $user = auth()->user();
+        $akun = $user->akun;
+
+        if (!$akun) {
+            return back()->with('error', 'Akun tidak ditemukan.');
+        }
 
         // Hapus foto jika tombol hapus diklik
         if ($request->has('hapus')) {
-            if ($user->foto && Storage::exists($user->foto)) {
-                Storage::delete($user->foto);
+            if ($akun->foto && Storage::exists($akun->foto)) {
+                Storage::delete($akun->foto);
             }
-            $user->update(['foto' => null]);
+            $akun->update(['foto' => null]);
             return back()->with('success', 'Foto profil dihapus.');
         }
 
@@ -48,27 +53,14 @@ class AkunController extends Controller
             'foto' => 'required|image|max:2048',
         ]);
 
-        if ($user->foto && Storage::exists($user->foto)) {
-            Storage::delete($user->foto);
+        if ($akun->foto && Storage::exists($akun->foto)) {
+            Storage::delete($akun->foto);
         }
 
         $path = $request->file('foto')->store('profil', 'public');
-        $user->update(['foto' => $path]);
+        $akun->update(['foto' => $path]);
 
         return back()->with('success', 'Foto profil diperbarui.');
-    }
-
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'password' => 'required|min:6|confirmed',
-        ]);
-
-        auth()->user()->update([
-            'password' => Hash::make($request->password),
-        ]);
-
-        return back()->with('success', 'Password berhasil diperbarui.');
     }
 
     public function index()
