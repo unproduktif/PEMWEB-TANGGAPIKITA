@@ -8,6 +8,7 @@ use App\Models\LaporanDonasi;
 use App\Models\AlokasiDana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class LaporanDonasiController extends Controller
@@ -82,38 +83,36 @@ class LaporanDonasiController extends Controller
     {
         $request->validate([
             'deskripsi' => 'required|string|max:1000',
-            'total' => 'required|numeric|min:0',
-            'sisa' => 'required|numeric|min:0|lte:total',
             'tanggal' => 'required|date|before_or_equal:today',
             'alokasi' => 'required|array|min:1',
             'alokasi.*.keterangan' => 'required|string|max:255',
             'alokasi.*.tujuan' => 'required|string|max:255',
             'alokasi.*.jumlah' => 'required|numeric|min:1000',
-        ], [
-            'sisa.lte' => 'Sisa dana tidak boleh melebihi total dana',
-            'alokasi.min' => 'Minimal harus ada 1 alokasi dana',
-            'alokasi.*.jumlah.min' => 'Minimal alokasi dana Rp 1.000'
         ]);
 
+        $donasi = Donasi::findOrFail($id_donasi);
+        $totalDonasi = $donasi->total;
         $totalAlokasi = collect($request->alokasi)->sum('jumlah');
-        if ($totalAlokasi > $request->total - $request->sisa) {
+        $sisaDana = $totalDonasi - $totalAlokasi;
+
+        if ($sisaDana < 0) {
             return back()->withErrors([
-                'alokasi' => 'Total alokasi melebihi dana yang digunakan (Total - Sisa)'
+                'alokasi' => 'Total alokasi melebihi total dana.'
             ])->withInput();
         }
 
         try {
-            $laporan = Laporan_donasi::create([
+            $laporan = LaporanDonasi::create([
                 'id_donasi' => $id_donasi,
-                'id_admin' => Auth::guard('admin')->id(),
+                'id_admin' => Auth::id(),
                 'deskripsi' => $request->deskripsi,
-                'total' => $request->total,
-                'sisa' => $request->sisa,
+                'total' => $totalDonasi,
+                'sisa' => $sisaDana,
                 'tanggal' => $request->tanggal,
             ]);
 
             foreach ($request->alokasi as $item) {
-                Alokasi_dana::create([
+                AlokasiDana::create([
                     'id_laporandonasi' => $laporan->id_laporandonasi,
                     'keterangan' => $item['keterangan'],
                     'tujuan' => $item['tujuan'],
@@ -126,5 +125,31 @@ class LaporanDonasiController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menyimpan laporan: ' . $e->getMessage());
         }
+    }
+
+    public function generatePDF($id_laporandonasi)
+    {
+        $laporan = LaporanDonasi::with(['donasi', 'alokasiDana', 'donasi.user'])
+                        ->findOrFail($id_laporandonasi);
+
+        $data = [
+            'laporan' => $laporan,
+            'tanggal' => \Carbon\Carbon::parse($laporan->tanggal)->translatedFormat('d F Y'),
+            'periode' => \Carbon\Carbon::parse($laporan->donasi->tgl_mulai)->translatedFormat('d M Y') . 
+                         ' - ' . \Carbon\Carbon::parse($laporan->donasi->tgl_selesai)->translatedFormat('d M Y')
+        ];
+        $pdf = PDF::loadView('admin.laporandonasi.pdf', $data);
+        
+        // Set paper size and orientation
+        $pdf->setPaper('A4', 'portrait');
+        
+        // Set additional options
+        $pdf->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+            'defaultFont' => 'sans-serif'
+        ]);
+        
+        return $pdf->download('Laporan_Donasi_' . $laporan->donasi->judul . '.pdf');
     }
 }

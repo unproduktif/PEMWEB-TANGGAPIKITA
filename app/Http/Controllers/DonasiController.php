@@ -9,7 +9,8 @@ use App\Models\User_donasi;
 use App\Models\Laporan;
 use App\Models\Akun;
 use App\Models\User;
-
+use App\Models\LaporanDonasi;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Midtrans\Snap;
 use Midtrans\Config;
 use Illuminate\Support\Str;
@@ -312,6 +313,29 @@ class DonasiController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('donasi.riwayat')->with('error', 'Gagal memeriksa status transaksi: ' . $e->getMessage());
         }
+    }
+
+    public function downloadLaporan($id_donasi)
+    {
+        $laporan = LaporanDonasi::with(['donasi', 'alokasiDana', 'donasi.user', 'admin'])
+                    ->where('id_donasi', $id_donasi)
+                    ->firstOrFail();
+
+        if ($laporan->donasi->status !== 'selesai') {
+            abort(403, 'Donasi belum selesai.');
+        }
+
+        $data = [
+            'laporan' => $laporan,
+            'tanggal' => \Carbon\Carbon::parse($laporan->tanggal)->translatedFormat('d F Y'),
+            'periode' => \Carbon\Carbon::parse($laporan->donasi->tgl_mulai)->translatedFormat('d M Y') . 
+                        ' - ' . \Carbon\Carbon::parse($laporan->donasi->tgl_selesai)->translatedFormat('d M Y'),
+            'stampel' => public_path('images/stempel.png')
+        ];
+
+        $pdf = PDF::loadView('admin.laporandonasi.pdf', $data);
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->download('Laporan_Donasi_' . $laporan->donasi->judul . '.pdf');
     }
 
 }
