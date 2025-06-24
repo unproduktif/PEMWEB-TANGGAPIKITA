@@ -31,4 +31,9 @@ class LaporanDonasi extends Model
     {
         return $this->hasMany(AlokasiDana::class, 'id_laporandonasi', 'id_laporandonasi');
     }
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'id_admin', 'id_user');
+    }
+
 }

@@ -82,11 +82,11 @@
                         <thead style="background-color: #EBFFD8;">
                             <tr>
                                 <th class="ps-4" style="width: 60px;">No</th>
-                                <th style="min-width: 250px;">Judul Donasi</th>
+                                <th style="min-width: 200px;">Judul Donasi</th>
                                 <th style="min-width: 150px;">Total Donasi</th>
                                 <th style="width: 120px;">Status</th>
                                 <th style="width: 150px;">Laporan</th>
-                                <th class="pe-4" style="width: 180px;">Aksi</th>
+                                <th class="pe-4" style="width: 230px;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,20 +122,27 @@
                                         @endif
                                     </td>
                                     <td class="pe-4">
-                                        @if(!$donasi->laporanDonasi)
+                                        @if(!$donasi->laporanDonasi && $donasi->status === 'selesai')
                                             <a href="{{ route('admin.laporandonasi.create', $donasi->id_donasi) }}" 
-                                               class="btn btn-sm btn-hover d-flex align-items-center px-3"
-                                               style="background-color: #8DBCC7; color: white; border-radius: 8px;">
+                                            class="btn btn-sm btn-hover d-flex justify-content-center align-items-center px-3"
+                                            style="background-color: #8DBCC7; color: white; border-radius: 8px;">
                                                 <i class="bi bi-pencil-square me-1"></i>
                                                 Buat Laporan
                                             </a>
+                                        @elseif(!$donasi->laporanDonasi && $donasi->status === 'berlangsung')
+                                            <span class="badge rounded-pill py-2 px-3 d-flex align-items-center" style="background-color: #fff3cd; color: #856404;">
+                                                <i class="bi bi-hourglass-split me-1"></i>
+                                                Menunggu Donasi Selesai
+                                            </span>
                                         @else
-                                            <a href="#" class="btn btn-sm btn-hover d-flex align-items-center px-3"
-                                               style="background-color: #28a745; color: white; border-radius: 8px;">
-                                                <i class="bi bi-eye-fill me-1"></i>
-                                                Lihat Laporan
+                                            <a href="{{ route('admin.laporandonasi.pdf', $donasi->laporanDonasi->id_laporandonasi) }}" 
+                                            class="btn btn-sm btn-hover d-flex justify-content-center align-items-center px-3"
+                                            style="background-color: #28a745; color: white; border-radius: 8px;">
+                                                <i class="bi bi-file-earmark-pdf-fill me-1"></i>
+                                                Download PDF
                                             </a>
                                         @endif
+
                                     </td>
                                 </tr>
                             @endforeach

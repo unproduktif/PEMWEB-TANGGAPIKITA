@@ -59,6 +59,13 @@
                                         <a href="{{ route('donasi.show', $donasi->id_donasi) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                             <i class="bi bi-eye-fill me-1"></i> Detail
                                         </a>
+
+                                        @if($donasi->status === 'selesai' && $donasi->laporanDonasi)
+                                                <a href="{{ route('donasi.downloadLaporan', $donasi->id_donasi) }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                                                    <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download PDF
+                                                </a>
+                                            @endif
+
                                     {{-- Jika status sedang berlangsung, tampilkan Edit dan Selesaikan --}}
                                     @if($donasi->status === 'berlangsung')
                                         <a href="{{ route('donasi.edit', $donasi->id_donasi) }}" class="btn btn-sm btn-outline-warning rounded-pill px-3">
