@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Akun; 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,46 +22,63 @@ class AkunController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
+            'no_hp' => 'required|string',
+            'alamat' => 'required|string',
+            'jabatan' => 'required|string|max:100',
         ]);
 
-        auth()->user()->update([
-            'nama' => $request->nama,
-        ]);
+        $akun = Auth::user();
+        // Update data akun
+        $akun->nama = $request->nama;
+        $akun->no_hp = $request->no_hp;
+        $akun->alamat = $request->alamat;
+
+        $akun->save();
+        if ($akun->admin) {
+            $akun->admin->update([
+                'jabatan' => $request->jabatan,
+            ]);
+        }
 
         return back()->with('success', 'Profil berhasil diperbarui.');
     }
 
     public function updateFoto(Request $request)
     {
-        $user = auth()->user();
-        $akun = $user->akun;
-
-        if (!$akun) {
-            return back()->with('error', 'Akun tidak ditemukan.');
-        }
-
-        // Hapus foto jika tombol hapus diklik
-        if ($request->has('hapus')) {
-            if ($akun->foto && Storage::exists($akun->foto)) {
-                Storage::delete($akun->foto);
-            }
-            $akun->update(['foto' => null]);
-            return back()->with('success', 'Foto profil dihapus.');
-        }
-
-        // Validasi dan simpan foto baru
         $request->validate([
-            'foto' => 'required|image|max:2048',
+            'foto' => 'nullable|image|max:2048',
         ]);
+        $akun = Auth::user();
 
-        if ($akun->foto && Storage::exists($akun->foto)) {
-            Storage::delete($akun->foto);
+        if ($request->hasFile('foto')) {
+            if ($akun->foto) {
+                Storage::disk('public')->delete($akun->foto);
+            }
+            $foto = $request->file('foto')->store('foto_admin', 'public');
+            $akun->foto = $foto;
         }
-
-        $path = $request->file('foto')->store('profil', 'public');
-        $akun->update(['foto' => $path]);
+        $akun->save();
 
         return back()->with('success', 'Foto profil diperbarui.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password_lama' => 'required',
+            'password_baru' => 'required|min:6|confirmed',
+        ]);
+
+        $akun = Auth::user();
+
+        if (!Hash::check($request->password_lama, $akun->password)) {
+            return back()->with('error', 'Password lama tidak cocok.');
+        }
+
+        $akun->password = Hash::make($request->password_baru);
+        $akun->save();
+
+        return back()->with('success', 'Password berhasil diubah.');
     }
 
     public function index()
