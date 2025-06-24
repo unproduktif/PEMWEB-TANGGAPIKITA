@@ -77,13 +77,13 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead style="background-color: #EBFFD8;">
                             <tr>
-                                <th class="text-center ps-4" style="width: 60px;">#</th>
-                                <th style="min-width: 200px;">Judul Laporan</th>
-                                <th style="min-width: 150px;">Pelapor</th>
-                                <th style="min-width: 120px;">Jenis Bencana</th>
-                                <th style="min-width: 180px;">Lokasi</th>
-                                <th style="min-width: 140px;">Tanggal</th>
-                                <th class="text-center pe-4" style="width: 180px;">Aksi</th>
+                                <th class="text-center ps-4" style="width: 60px;">No</th>
+                                <th style="min-width: 120px;">Judul Laporan</th>
+                                <th style="min-width: 120px;">Pelapor</th>
+                                <th style="min-width: 120px;">Jenis</th>
+                                <th style="min-width: 120px;">Lokasi</th>
+                                <th style="min-width: 120px;">Tanggal</th>
+                                <th class="text-center pe-4" style="width: 120px;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -121,27 +121,20 @@
                                         </div>
                                     </td>
                                     <td class="text-center pe-4">
-                                        <div class="d-flex flex-column align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
                                             {{-- Detail Button --}}
-                                            <a href="{{ route('admin.informasi.show', $laporan->id_laporan) }}"
-                                               class="btn btn-sm btn-hover d-flex align-items-center px-3"
-                                               style="background-color: #8DBCC7; color: white; border-radius: 8px;"
-                                               data-bs-toggle="tooltip" data-bs-placement="top" title="Detail Laporan">
-                                                <i class="bi bi-eye-fill me-1"></i>
-                                                <span class="d-none d-md-inline">Detail</span>
+                                            <a href="{{ route('admin.informasi.show', $laporan->id_laporan) }}" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" style="background-color: #e3f2fd; color: #2c3e50; border-radius: 8px;">
+                                                <i class="bi bi-eye-fill me-1"></i> Detail
                                             </a>
-
                                             {{-- Delete Button --}}
                                             <form action="{{ route('admin.informasi.destroy', $laporan->id_laporan) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
-                                                        class="btn btn-sm btn-hover d-flex align-items-center px-3"
-                                                        style="background-color: #e74c3c; color: white; border-radius: 8px;"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Laporan"
+                                                        class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" style="background-color: #ffebee; color: #c62828; border-radius: 8px;"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top"
                                                         onclick="return confirm('Apakah Anda yakin ingin menghapus laporan ini?')">
-                                                    <i class="bi bi-trash-fill me-1"></i>
-                                                    <span class="d-none d-md-inline">Hapus</span>
+                                                    <i class="bi bi-trash-fill me-1"></i> Hapus
                                                 </button>
                                             </form>
                                         </div>

@@ -4,13 +4,12 @@
 <div class="container py-4 py-md-5">
     {{-- Create Button --}}
     <div class="d-flex justify-content-between align-items-center mb-4 mb-md-5">
-        <h3 class="fw-bold mb-0" style="color: #2c3e50;">Daftar Konten Edukasi</h3>
         @auth
-            <a href="{{ route('admin.edukasi.create') }}" class="btn btn-hover px-4 py-2 d-flex align-items-center" style="background-color: #3a7bd5; color: white; border-radius: 8px;">
+            <a href="{{ route('admin.edukasi.create') }}" class="btn btn-hover px-4 py-2 d-flex align-items-center" style="background-color: #8DBCC7; color: white; border-radius: 8px;">
                 <i class="bi bi-plus-lg me-2"></i> Tambah Konten
             </a>
         @else
-            <a href="#" id="btn-tambah-edukasi" class="btn btn-hover px-4 py-2 d-flex align-items-center" style="background-color: #3a7bd5; color: white; border-radius: 8px;">
+            <a href="#" id="btn-tambah-edukasi" class="btn btn-hover px-4 py-2 d-flex align-items-center" style="background-color: #8DBCC7; color: white; border-radius: 8px;">
                 <i class="bi bi-plus-lg me-2"></i> Tambah Konten
             </a>
         @endauth
@@ -48,7 +47,7 @@
                             <div class="d-flex flex-wrap gap-4 mb-3">
                                 <div class="d-flex align-items-center">
                                     <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                                        <i class="bi bi-calendar-event-fill" style="color: #3a7bd5;"></i>
+                                        <i class="bi bi-calendar-event-fill" style="color: #8DBCC7;"></i>
                                     </div>
                                     <div>
                                         <small class="d-block text-muted">Tanggal Publikasi</small>
@@ -58,7 +57,7 @@
                                 
                                 <div class="d-flex align-items-center">
                                     <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                                        <i class="bi bi-card-text" style="color: #3a7bd5;"></i>
+                                        <i class="bi bi-card-text" style="color: #8DBCC7;"></i>
                                     </div>
                                     <div>
                                         <small class="d-block text-muted">Konten</small>
@@ -72,7 +71,7 @@
                         
                         <div class="d-flex flex-wrap gap-2">
                             <a href="{{ route('admin.edukasi.show', $edukasi->id_edukasi) }}" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" style="background-color: #e3f2fd; color: #2c3e50; border-radius: 8px;">
-                                <i class="bi bi-eye-fill me-1"></i> Lihat
+                                <i class="bi bi-eye-fill me-1"></i> Detail
                             </a>
                             <a href="{{ route('admin.edukasi.edit', $edukasi->id_edukasi) }}" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" style="background-color: #fff8e1; color: #2c3e50; border-radius: 8px;">
                                 <i class="bi bi-pencil-fill me-1"></i> Edit
@@ -94,9 +93,6 @@
             <i class="bi bi-journal-text mb-3" style="font-size: 2.5rem; color: #3a7bd5;"></i>
             <h5 class="fw-bold mb-2" style="color: #2c3e50;">Belum Ada Konten Edukasi</h5>
             <p class="text-muted mb-4">Mulai membuat konten edukasi pertama Anda</p>
-            <a href="{{ route('admin.edukasi.create') }}" class="btn px-4 py-2" style="background-color: #3a7bd5; color: white;">
-                <i class="bi bi-plus-lg me-1"></i> Buat Konten
-            </a>
         </div>
         @endforelse
 
