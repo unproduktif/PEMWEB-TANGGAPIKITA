@@ -17,7 +17,6 @@ use App\Http\Controllers\HomeController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index']);
 
-// Auth Routes
 Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'formRegister'])->name('register');
@@ -129,10 +128,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
     Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
     Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
-    // Route::get('/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
-    // Route::patch('/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
-    // Route::patch('/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
-    // Route::patch('/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
 });
 Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
 Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
@@ -146,3 +141,10 @@ Route::prefix('admin/akun')->name('admin.akun.')->middleware(['auth', 'is_admin'
     Route::put('/{id}', [AdminUserController::class, 'update'])->name('update');
     Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('destroy');
 });
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/admin/laporandonasi/pdf/{id_laporandonasi}', [LaporanDonasiController::class, 'generatePDF'])
+        ->name('admin.laporandonasi.pdf');
+});
+
+Route::get('/donasi/{id_donasi}/laporan/download', [\App\Http\Controllers\DonasiController::class, 'downloadLaporan'])->name('donasi.downloadLaporan');

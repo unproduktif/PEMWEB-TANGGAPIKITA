@@ -8,6 +8,7 @@ use App\Models\LaporanDonasi;
 use App\Models\AlokasiDana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class LaporanDonasiController extends Controller
@@ -124,5 +125,31 @@ class LaporanDonasiController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menyimpan laporan: ' . $e->getMessage());
         }
+    }
+
+    public function generatePDF($id_laporandonasi)
+    {
+        $laporan = LaporanDonasi::with(['donasi', 'alokasiDana', 'donasi.user'])
+                        ->findOrFail($id_laporandonasi);
+
+        $data = [
+            'laporan' => $laporan,
+            'tanggal' => \Carbon\Carbon::parse($laporan->tanggal)->translatedFormat('d F Y'),
+            'periode' => \Carbon\Carbon::parse($laporan->donasi->tgl_mulai)->translatedFormat('d M Y') . 
+                         ' - ' . \Carbon\Carbon::parse($laporan->donasi->tgl_selesai)->translatedFormat('d M Y')
+        ];
+        $pdf = PDF::loadView('admin.laporandonasi.pdf', $data);
+        
+        // Set paper size and orientation
+        $pdf->setPaper('A4', 'portrait');
+        
+        // Set additional options
+        $pdf->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+            'defaultFont' => 'sans-serif'
+        ]);
+        
+        return $pdf->download('Laporan_Donasi_' . $laporan->donasi->judul . '.pdf');
     }
 }
