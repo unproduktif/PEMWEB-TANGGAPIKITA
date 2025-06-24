@@ -237,7 +237,7 @@
             </div>
             <div class="info-item">
                 <div class="info-label">Penanggung Jawab Program</div>
-                <div class="info-value">{{ $laporan->donasi->user->name }}</div>
+                <div class="info-value">{{ $laporan->donasi->user->akun->nama }}</div>
             </div>
             <div class="info-item">
                 <div class="info-label">Tanggal Pembuatan Laporan</div>
@@ -308,6 +308,9 @@
     <div class="signature-container">
         <div class="signature-box">
             <div>Mataram, {{ \Carbon\Carbon::parse($laporan->tanggal)->translatedFormat('d F Y') }}</div>
+            <div class="mt-3 mb-2">
+                    <img src="{{ public_path('images/stempel.png') }}" alt="Stempel" width="120">
+            </div>
             <div class="signature-title">TanggapiKita</div>
         </div>
     </div>
