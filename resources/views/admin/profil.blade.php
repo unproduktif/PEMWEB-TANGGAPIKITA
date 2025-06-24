@@ -20,10 +20,12 @@
             <div class="col-lg-3 text-center">
                 @if(auth()->user()->foto)
                     <img src="{{ asset('storage/' . auth()->user()->foto) }}" 
-                         class="rounded-circle shadow-sm border border-3 border-primary-subtle" width="130" height="130" style="object-fit: cover;" alt="Foto Profil">
+                        class="rounded-circle shadow-sm border border-3 border-primary-subtle" 
+                        width="130" height="130" style="object-fit: cover;" alt="Foto Profil">
                 @else
                     <i class="bi bi-person-circle text-secondary" style="font-size: 110px;"></i>
                 @endif
+
                 <h5 class="mt-3 fw-semibold mb-0">{{ auth()->user()->nama }}</h5>
                 <span class="badge bg-primary-subtle text-primary text-capitalize">{{ auth()->user()->role }}</span>
             </div>
@@ -67,7 +69,7 @@
                 <h5 class="text-primary fw-bold mb-3">
                     <i class="bi bi-pencil-square me-2"></i> Form Perbarui Data
                 </h5>
-                <form action="{{ route('admin.profil.update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.foto.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf @method('PATCH')
                     <div class="row g-3">
                         <div class="col-md-6">

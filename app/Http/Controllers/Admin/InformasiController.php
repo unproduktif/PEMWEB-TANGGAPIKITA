@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
+use App\Models\Donasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -61,6 +62,9 @@ class InformasiController extends Controller
         $laporan = Laporan::findOrFail($id);
         if ($laporan->media && Storage::exists('public/' . $laporan->media)) {
             Storage::delete('public/' . $laporan->media);
+        }
+        if ($laporan->donasi()->count() > 0) {
+            return redirect()->back()->with('error', 'Informasi terhubung ke donasi aktif.');
         }
         $laporan->delete();
         return redirect()->route('admin.informasi.index')->with('success', 'Informasi berhasil dihapus.');

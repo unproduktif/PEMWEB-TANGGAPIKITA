@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Laporan;
+use App\Models\Donasi;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -46,6 +47,9 @@ class LaporanController extends Controller
     public function destroy($id)
     {
         $laporan = Laporan::findOrFail($id);
+        if ($laporan->donasi()->count()>0){
+            return redirect()->back()->with('error', 'Laporan terhubung ke donasi aktif.');
+        }
         $laporan->delete();
 
         return redirect()->back()->with('success', 'Laporan berhasil dihapus.');

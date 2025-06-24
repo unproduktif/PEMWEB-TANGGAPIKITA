@@ -105,7 +105,7 @@
                                             <form id="hapus-form-{{ $user->id_user }}" 
                                                   action="{{ route('admin.akun.destroy', $user->id_user) }}" 
                                                   method="POST" 
-                                                  onsubmit="return confirm('Yakin ingin menghapus akun ini?')">
+                                                  >
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-hover px-3 py-2 d-flex align-items-center" style="background-color: #ffebee; color: #c62828; border-radius: 8px;">
@@ -226,15 +226,6 @@
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        // Confirmation for delete
-        document.querySelectorAll('form[id^="hapus-form-"]').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                if (!confirm('Apakah Anda yakin ingin menghapus akun ini?')) {
-                    e.preventDefault();
-                }
-            });
         });
     });
 </script>

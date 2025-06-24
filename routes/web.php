@@ -13,14 +13,9 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Admin\EdukasiController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MidtransController;
-
-Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
-
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index']);
-
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
@@ -55,7 +50,7 @@ Route::prefix('admin/laporandonasi')->middleware(['auth', 'is_admin'])->group(fu
     Route::post('/simpan/{id_donasi}', [App\Http\Controllers\Admin\LaporanDonasiController::class, 'store'])->name('admin.laporandonasi.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'is_user'])->group(function () {
     Route::get('/profil', [App\Http\Controllers\UserController::class, 'index'])->name('profil');
     Route::patch('/profil', [App\Http\Controllers\UserController::class, 'update'])->name('profil.update');
     Route::patch('/profil/foto', [App\Http\Controllers\UserController::class, 'updateFoto'])->name('foto.update');
@@ -64,20 +59,20 @@ Route::middleware('auth')->group(function () {
 
 
 // BISA DIAKSES TANPA LOGIN
-Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('laporan.index');
 
 // HARUS LOGIN
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'is_user'])->group(function () {
     Route::get('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+    Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
     Route::get('/laporan/{id_laporan}/edit',[LaporanController::class, 'edit'])->name('laporan.edit');
     Route::patch('/laporan/{id_laporan}', [LaporanController::class, 'update'])->name('laporan.update');
     Route::delete('/laporan/{id_laporan}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
     
 });
-Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
+Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('laporan.index');
 
-Route::middleware('auth')->group(function(){
+Route::middleware(['auth', 'is_user'])->group(function(){
     Route::get('/donasi/form/{id_donasi}', [DonasiController::class, 'createForm'])->name('donasi.form');
     Route::post('/donasi/store', [DonasiController::class, 'store'])->name('donasi.store');
     Route::get('/donasi/campaign/{id_laporan}', [DonasiController::class, 'createCampaign'])->name('donasi.createCampaign');
@@ -109,9 +104,9 @@ Route::get('/bencana', [LaporanController::class, 'indexBencana'])->name('bencan
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/profil', function () {
-        return view('admin.profil');
-    })->name('admin.profil');
+    // Route::get('/admin/profil', function () {
+    //     return view('admin.profil');
+    // })->name('admin.profil');
     Route::get('/admin/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
     Route::patch('/admin/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
     Route::patch('/admin/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
@@ -134,25 +129,11 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
     Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
     Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
-    // Route::resource('akun', AkunController::class)->except(['show'])->names([
-    //     'index' => 'admin.akun.index',
-    //     'create' => 'admin.akun.create',
-    //     'store' => 'admin.akun.store',
-    //     'edit' => 'admin.akun.edit',
-    //     'update' => 'admin.akun.update',
-    //     'destroy' => 'admin.akun.destroy'
-    // ]);
-    
-    // Keep your existing profile routes
-    Route::get('/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
-    Route::patch('/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
-    Route::patch('/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
-    Route::patch('/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
+    // Route::get('/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
+    // Route::patch('/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
+    // Route::patch('/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
+    // Route::patch('/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
 });
-
-Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
-Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
-
 Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
 Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 
