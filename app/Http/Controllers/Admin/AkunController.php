@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Akun; 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AkunController extends Controller
 {
@@ -90,28 +92,55 @@ class AkunController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'email' => 'required|email|unique:akun,email',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('akuns', 'email'),
+            ],
             'password' => 'required|min:6|confirmed',
             'no_hp' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
+            'kode_pos' => 'nullable|string|max:10',
+            'kota' => 'nullable|string|max:100',
+            'provinsi' => 'nullable|string|max:100',
         ]);
 
-        $user = User::create([
-            'name' => $request->nama,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        \DB::beginTransaction();
+        try {
+            // Create the Akun first
+            $akun = Akun::create([
+                'nama' => $validated['nama'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'no_hp' => $validated['no_hp'],
+                'alamat' => $validated['alamat'],
+                'role' => 'user',
+            ]);
 
-        $user->akun()->create([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'no_hp' => $request->no_hp,
-            'alamat' => $request->alamat,
-        ]);
+            // Then create the User with the same ID
+            $user = new User([
+                'kode_pos' => $validated['kode_pos'],
+                'kota' => $validated['kota'],
+                'provinsi' => $validated['provinsi'],
+            ]);
+            
+            // Set the id_user explicitly
+            $user->id_user = $akun->id_akun;
+            $user->save();
 
-        return redirect()->route('admin.akun.index')->with('success', 'Akun pengguna berhasil ditambahkan.');
+            \DB::commit();
+
+            return redirect()->route('admin.akun.index')
+                ->with('success', 'Akun pengguna berhasil dibuat!');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return back()->withInput()
+                ->with('error', 'Gagal membuat akun: ' . $e->getMessage());
+        }
     }
 
     public function edit(User $user)
@@ -150,4 +179,16 @@ class AkunController extends Controller
 
         return redirect()->route('admin.akun.index')->with('success', 'Akun pengguna berhasil dihapus.');
     }
+
+    public function show($id)
+    {
+        $user = User::with('akun')->findOrFail($id);
+        
+        if (!$user->akun) {
+            abort(404, 'Data akun tidak ditemukan');
+        }
+
+        return view('admin.akun.show', compact('user'));
+    }
 }
+

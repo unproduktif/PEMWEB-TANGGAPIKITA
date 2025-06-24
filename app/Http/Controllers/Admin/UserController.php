@@ -11,11 +11,30 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('akun')->get();
+        $query = User::with('akun');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('akun', function($q) use ($search) {
+                $q->where('nama', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        if ($request->filled('role')) {
+            $query->whereHas('akun', function($q) use ($request) {
+                $q->where('role', $request->role);
+            });
+        }
+
+        $users = $query->get();
+
         return view('admin.akun.index', compact('users'));
     }
+
+
 
     public function edit($id)
     {

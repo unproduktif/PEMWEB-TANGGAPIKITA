@@ -2,21 +2,6 @@
 
 @section('content')
 <div class="container py-4 py-md-5">
-
-    {{-- Hero Section --}}
-    <div class="text-center mb-5 px-3">
-        <h1 class="fw-bold display-5 display-md-4 mb-3" style="color: #2c3e50;">
-            <span class="d-block">Bagikan Pengetahuan,</span>
-            <span class="text-gradient" style="background: linear-gradient(to right, #8DBCC7, #00ADB5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Untuk Kesadaran Bersama</span>
-        </h1>
-        <p class="lead text-muted mb-4">
-            <span class="fw-medium" style="color: #2c3e50;">TanggapiKita</span> — Edukasi adalah Kekuatan.
-        </p>
-        <div class="d-flex justify-content-center">
-            <div style="width: 100px; height: 4px; background: linear-gradient(to right, #8DBCC7, #00ADB5); border-radius: 2px;"></div>
-        </div>
-    </div>
-
     {{-- Form Card --}}
     <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
         <div class="card-body p-4 p-md-5">
