@@ -56,19 +56,16 @@ Route::middleware(['auth', 'is_user'])->group(function () {
     Route::patch('/profil/password', [App\Http\Controllers\UserController::class, 'updatePassword'])->name('password.update');
 });
 
-
-// BISA DIAKSES TANPA LOGIN
-
 // HARUS LOGIN
 Route::middleware(['auth', 'is_user'])->group(function () {
     Route::get('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
-    Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
     Route::get('/laporan/{id_laporan}/edit',[LaporanController::class, 'edit'])->name('laporan.edit');
     Route::patch('/laporan/{id_laporan}', [LaporanController::class, 'update'])->name('laporan.update');
     Route::delete('/laporan/{id_laporan}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
     
 });
+Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
 Route::get('/laporan-saya', [LaporanController::class, 'laporanSaya'])->name('laporan.index');
 
 Route::middleware(['auth', 'is_user'])->group(function(){
@@ -82,18 +79,13 @@ Route::middleware(['auth', 'is_user'])->group(function(){
     Route::get('/donasi/riwayat', [DonasiController::class, 'riwayat'])->name('donasi.riwayat');
     Route::get('/donasi/kelola', [DonasiController::class, 'kelola'])->name('donasi.kelola');
     Route::post('/donasi/midtrans', [DonasiController::class, 'createMidtrans'])->name('donasi.midtrans');
-    Route::get('/donasi/payment/{order_id}', [DonasiController::class, 'redirectToPayment'])
-    ->name('donasi.payment.redirect');
-    // Untuk redirect setelah pembayaran sukses
+    Route::get('/donasi/payment/{order_id}', [DonasiController::class, 'redirectToPayment'])->name('donasi.payment.redirect');
     Route::get('/donasi/sukses', function () {
         return view('pages.donasi.sukses');
     })->name('donasi.sukses');
-
-    // Untuk redirect ketika pembayaran pending
     Route::get('/donasi/pending', function () {
         return view('pages.donasi.pending');
     })->name('donasi.pending');
-        
 });
 Route::get('/donasi', [DonasiController::class, 'index'])->name('donasi.index');
 Route::get('/donasi/{id_donasi}', [DonasiController::class, 'show'])->name('donasi.show');
@@ -103,16 +95,11 @@ Route::get('/bencana', [LaporanController::class, 'indexBencana'])->name('bencan
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    // Route::get('/admin/profil', function () {
-    //     return view('admin.profil');
-    // })->name('admin.profil');
     Route::get('/admin/profil', [AkunController::class, 'showProfil'])->name('admin.profil');
     Route::patch('/admin/profil', [AkunController::class, 'updateProfil'])->name('admin.profil.update');
     Route::patch('/admin/profil/foto', [AkunController::class, 'updateFoto'])->name('admin.foto.update');
     Route::patch('/admin/profil/password', [AkunController::class, 'updatePassword'])->name('admin.password.update');
-
 });
-
 
 Route::prefix('admin/laporan')->group(function () {
     Route::get('/', [AdminLaporanController::class, 'index'])->name('admin.laporan.index');

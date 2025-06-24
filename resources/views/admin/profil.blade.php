@@ -12,7 +12,7 @@
 
     <div class="card shadow-sm border-0 rounded-4 p-4">
         <h3 class="fw-bold text-primary mb-4">
-            <i class="bi bi-person-circle me-2"></i> Profil Admin
+            <i class="bi bi-person-circle me-2"></i> Profil Saya
         </h3>
 
         {{-- Section Informasi Profil --}}
@@ -20,21 +20,22 @@
             <div class="col-lg-3 text-center">
                 @if(auth()->user()->foto)
                     <img src="{{ asset('storage/' . auth()->user()->foto) }}" 
-                        class="rounded-circle shadow-sm border border-3 border-primary-subtle" 
-                        width="130" height="130" style="object-fit: cover;" alt="Foto Profil">
+                        class="rounded-circle shadow-sm border border-3 border-primary-subtle" width="130" height="130" style="object-fit: cover;" alt="Foto Profil">
                 @else
                     <i class="bi bi-person-circle text-secondary" style="font-size: 110px;"></i>
                 @endif
-
                 <h5 class="mt-3 fw-semibold mb-0">{{ auth()->user()->nama }}</h5>
-                <span class="badge bg-primary-subtle text-primary text-capitalize">{{ auth()->user()->role }}</span>
             </div>
 
             <div class="col-lg-9">
                 <div class="row">
                     @php
                         $profilData = [
+                            ['icon' => 'person', 'label' => 'Nama', 'value' => auth()->user()->nama],
                             ['icon' => 'envelope', 'label' => 'Email', 'value' => auth()->user()->email],
+                            ['icon' => 'telephone', 'label' => 'No HP', 'value' => auth()->user()->no_hp],
+                            ['icon' => 'geo-alt', 'label' => 'Alamat', 'value' => auth()->user()->alamat],
+                            ['icon' => 'building', 'label' => 'Jabatan', 'value' => auth()->user()->admin->jabatan ?? '-'],
                         ];
                     @endphp
 
@@ -69,7 +70,8 @@
                 <h5 class="text-primary fw-bold mb-3">
                     <i class="bi bi-pencil-square me-2"></i> Form Perbarui Data
                 </h5>
-                <form action="{{ route('admin.foto.update') }}" method="POST" enctype="multipart/form-data">
+                {{-- Form Update Data --}}
+                <form action="{{ route('admin.profil.update') }}" method="POST">
                     @csrf @method('PATCH')
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -77,15 +79,36 @@
                             <input type="text" name="nama" class="form-control" value="{{ old('nama', auth()->user()->nama) }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Foto Profil</label><br>
-                            @if(auth()->user()->foto)
-                                <img src="{{ asset('storage/' . auth()->user()->foto) }}" alt="Foto" width="100" class="rounded mb-2 d-block">
-                            @endif
-                            <input type="file" name="foto" class="form-control">
+                            <label class="form-label">No HP</label>
+                            <input type="text" name="no_hp" class="form-control" value="{{ old('no_hp', auth()->user()->no_hp) }}" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Alamat</label>
+                            <textarea name="alamat" class="form-control" rows="2" required>{{ old('alamat', auth()->user()->alamat) }}</textarea>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Jabatan</label>
+                            <input type="text" name="jabatan" class="form-control" value="{{ old('jabatan', auth()->user()->admin->jabatan ?? '') }}">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success rounded-pill mt-3 px-4">
                         <i class="bi bi-save me-1"></i> Simpan Perubahan
+                    </button>
+                </form>
+
+                {{-- Form Update Foto --}}
+                <hr class="my-4">
+                <form action="{{ route('admin.foto.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf @method('PATCH')
+                    <div class="mb-3">
+                        <label class="form-label">Foto Profil</label><br>
+                        @if(auth()->user()->foto)
+                            <img src="{{ asset('storage/' . auth()->user()->foto) }}" alt="Foto" width="100" class="rounded mb-2 d-block">
+                        @endif
+                        <input type="file" name="foto" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        <i class="bi bi-upload me-1"></i> Update Foto
                     </button>
                 </form>
             </div>
