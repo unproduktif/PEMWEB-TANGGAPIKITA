@@ -37,7 +37,7 @@
                                 <th style="width: 15%;">Jumlah</th>
                                 <th style="width: 20%;">Tanggal</th>
                                 <th style="width: 15%;">Status</th>
-                                <th class="text-center" style="width: 20%;">Aksi</th>
+                                <th class="text-center" style="width: 20%;">Ket</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,17 +85,23 @@
                                             </a>
                                         @elseif (in_array($status, ['settlement', 'capture']))
                                             @php
-                                                $alokasi = $donasi->alokasi_dana ?? null;
+                                                $laporanDonasi = $donasi->laporanDonasi;
+                                                $alokasi = $laporanDonasi?->alokasiDana;
                                             @endphp
 
-                                            @if ($alokasi)
-                                                <span class="badge rounded-pill bg-success bg-opacity-10 text-success py-2 px-3">
-                                                    <i class="bi bi-check-circle-fill me-1"></i> Alokasi Dana Selesai
-                                                </span>
-                                            @else
+                                            @if ($alokasi && $alokasi->count() > 0)
+                                                @if($donasi->status === 'selesai' && $laporanDonasi)
+                                                    <a href="{{ route('donasi.downloadLaporan', $donasi->id_donasi) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 mt-2">
+                                                        <i class="bi bi-file-earmark-pdf-fill me-1"></i> Alokasi Dana
+                                                    </a>
+                                                @endif
+
+                                            @elseif ($laporanDonasi)
                                                 <span class="badge rounded-pill bg-warning bg-opacity-10 text-dark py-2 px-3">
                                                     <i class="bi bi-hourglass-split me-1"></i> Alokasi dalam Proses
                                                 </span>
+                                            @else
+                                                <span class="text-muted">-</span>
                                             @endif
                                         @else
                                             <span class="text-muted">-</span>

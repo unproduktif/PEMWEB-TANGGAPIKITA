@@ -52,8 +52,14 @@ class EdukasiController extends Controller
     public function show($id)
     {
         $edukasi = Edukasi::with('admin')->findOrFail($id);
-        return view('admin.edukasi.show', compact('edukasi'));
+
+        if (auth()->check() && auth()->user()->role=='admin') {
+            return view('admin.edukasi.show', compact('edukasi'));
+        }
+
+        return view('pages.edukasi', compact('edukasi'));
     }
+
 
     // Tampilkan form edit
     public function edit($id)

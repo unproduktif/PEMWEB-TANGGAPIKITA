@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function index() #tes
     {
-        $edukasis = Edukasi::latest()->paginate(3);
+        $edukasis = Edukasi::latest()->paginate(6);
         $laporans = Laporan::where('status', 'verifikasi')->latest()->take(3)->get(); 
         $donasis = Donasi::latest()->take(3)->get();
 
