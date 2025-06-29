@@ -111,11 +111,13 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/edukasi/create', [EdukasiController::class, 'create'])->name('admin.edukasi.create'); // letakkan ini di atas
     Route::get('/edukasi', [EdukasiController::class, 'index'])->name('admin.edukasi.index');
     Route::post('/edukasi', [EdukasiController::class, 'store'])->name('admin.edukasi.store');
-    Route::get('/edukasi/{id_edukasi}', [EdukasiController::class, 'show'])->name('admin.edukasi.show');
     Route::get('/edukasi/{id_edukasi}/edit', [EdukasiController::class, 'edit'])->name('admin.edukasi.edit');
+    Route::get('/edukasi/{id_edukasi}', [EdukasiController::class, 'show'])->name('admin.edukasi.show');
     Route::put('/edukasi/{id_edukasi}', [EdukasiController::class, 'update'])->name('admin.edukasi.update');
     Route::delete('/edukasi/{id_edukasi}', [EdukasiController::class, 'destroy'])->name('admin.edukasi.destroy');
 });
+Route::get('/edukasi/{id_edukasi}', [EdukasiController::class, 'show'])->name('pages.edukasi');
+
 Route::get('/lupa-password', [AuthController::class, 'formLupaPassword'])->name('password.request');
 Route::post('/lupa-password', [AuthController::class, 'resetPassword'])->name('password.reset');
 

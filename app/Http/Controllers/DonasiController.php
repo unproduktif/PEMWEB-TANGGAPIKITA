@@ -213,10 +213,19 @@ class DonasiController extends Controller
 
     public function riwayat()
     {
-        $user = Auth::user();
-        $donasiRiwayat = $user->user->donasis; // relasi belongsToMany
+        $akun = auth()->user(); // model Akun
+        $user = $akun->user;    // relasi ke User (bisa null)
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Akun ini belum memiliki profil user.');
+        }
+
+        $donasiRiwayat = auth()->user()->user->donasis()
+        ->with(['laporanDonasi.alokasiDana'])
+        ->get();
         return view('pages.donasi.riwayat', compact('donasiRiwayat'));
     }
+
 
     public function kelola()
     {

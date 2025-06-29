@@ -68,7 +68,7 @@
                                 <span class="badge" style="background-color: #C4E1E6; color: #2c3e50; font-size: 0.75rem; font-size-md: 0.875rem;">Edukasi</span>
                             </div>
                             <p class="card-text text-muted mb-2 mb-md-3" style="font-size: 0.875rem; font-size-md: 1rem;">{{ Str::limit($edukasi->konten, 80) }}</p>
-                            <a href="{{ route('admin.edukasi.show', $edukasi->id_edukasi) }}" class="btn btn-sm px-2 px-md-3 py-1" style="background-color: #A4CCD9; color: #2c3e50; border-radius: 50px; font-size: 0.875rem; font-size-md: 1rem;">Baca Selengkapnya</a>
+                            <a href="{{ route('pages.edukasi', $edukasi->id_edukasi) }}" class="btn btn-sm px-2 px-md-3 py-1" style="background-color: #A4CCD9; color: #2c3e50; border-radius: 50px; font-size: 0.875rem; font-size-md: 1rem;">Baca Selengkapnya</a>
                         </div>
                     </div>
                 </div>
