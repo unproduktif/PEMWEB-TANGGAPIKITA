@@ -14,7 +14,9 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Admin\EdukasiController;
 use App\Http\Controllers\HomeController;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::middleware(['auth', 'is_user'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+});
 Route::get('/home', [HomeController::class, 'index']);
 
 Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
