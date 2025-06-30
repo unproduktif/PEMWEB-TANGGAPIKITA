@@ -35,13 +35,13 @@
 
                 {{-- Konten Edukasi --}}
                 <div class="mb-4">
-                    <label for="isi" class="form-label fw-semibold mb-3" style="color: #2c3e50;">
+                    <label for="konten" class="form-label fw-semibold mb-3" style="color: #2c3e50;">
                         <i class="bi bi-text-paragraph me-2" style="color: #8DBCC7;"></i>
                         Konten Edukasi
                     </label>
-                    <textarea name="isi" id="isi" class="form-control border-1 py-3 px-3" 
+                    <textarea name="konten" id="konten" class="form-control border-1 py-3 px-3" 
                               style="border-color: #C4E1E6; border-radius: 8px; min-height: 250px;"
-                              rows="7" placeholder="Tulis konten edukasi yang informatif" required>{{ old('isi', $edukasi->konten) }}</textarea>
+                              rows="7" placeholder="Tulis konten edukasi yang informatif" required>{{ old('konten', $edukasi->konten) }}</textarea>
                     <div class="form-text text-muted">Gunakan format yang jelas dengan paragraf dan poin-poin penting</div>
                 </div>
 
