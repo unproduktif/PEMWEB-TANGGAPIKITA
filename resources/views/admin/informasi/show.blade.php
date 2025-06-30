@@ -131,7 +131,7 @@
                                         <p class="mb-0">
                                             {{ $laporan->user->akun->nama ?? 'Anonim' }}
                                             @if($laporan->user->akun->nama)
-                                                <small class="text-muted d-block">({{ $laporan->user->email }})</small>
+                                                <small class="text-muted d-block">({{ $laporan->user->akun->email }})</small>
                                             @endif
                                         </p>
                                     </div>

@@ -151,6 +151,9 @@
                         <i class="bi bi-trash-fill me-1"></i> Hapus
                     </button>
                 </form>
+                <a href="{{ route('admin.akun.index') }}" class="btn btn-hover px-4 py-2 d-flex align-items-center" style="background-color: #A4CCD9; color: #2c3e50; border-radius: 8px;">
+                    <i class="bi bi-arrow-left me-2"></i> Kembali
+                </a>
             </div>
         </div>
     </div>
